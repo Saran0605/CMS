@@ -20,22 +20,7 @@ $sql5 = "SELECT complaints_detail.*,manager.* FROM complaints_detail LEFT JOIN m
 $result5 = mysqli_query($conn, $sql5);
 $compcount3 = mysqli_num_rows($result5);
 
-$sql11 = "SELECT 
-    cd.*, 
-    c.*, 
-    f.faculty_name, 
-    f.department, 
-    f.faculty_contact, 
-    f.faculty_mail 
-FROM 
-    complaints_detail AS cd 
-LEFT JOIN 
-    comments AS c ON cd.id = c.problem_id 
-JOIN 
-    faculty_details AS f ON cd.faculty_id = f.faculty_id 
-WHERE 
-    cd.status = 6";
-
+$sql11 = "SELECT * FROM complaints_detail WHERE status='6'";
 $result11 = mysqli_query($conn, $sql11);
 ?>
 <!DOCTYPE html>
@@ -246,7 +231,7 @@ $result11 = mysqli_query($conn, $sql11);
 
                                 </ul>
                                 <!-- Tab panes -->
-                                <!-- Tab panes -->
+                                <!-- Requirement's Table -->
                                 <div class="tab-content tabcontent-border">
 
 
@@ -260,9 +245,6 @@ $result11 = mysqli_query($conn, $sql11);
 
                                                 <th class="text-center" style="background:linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color:white;"><b>
                                                         <h5>S.No</h5>
-                                                    </b></th>
-                                                <th class="text-center" style="background:linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color:white;"><b>
-                                                        <h5>Dept</h5>
                                                     </b></th>
                                                 <th class="text-center" style="background:linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color:white;"><b>
                                                         <h5>Block \ Venue</h5>
@@ -292,12 +274,12 @@ $result11 = mysqli_query($conn, $sql11);
                                             while ($row = mysqli_fetch_array($result11)) {
                                             ?>
                                                 <tr>
-                                                    <th class="text-center" scope="row"><?php echo $s ?></td>
-                                                    <td class="text-center"><?php echo $row['department'] ?></td>
+                                                    <td class="text-center" scope="row"><?php echo $s ?></td>
+                                                    
                                                     <td class="text-center"><?php echo $row['block_venue'] ?> \ <?php echo $row['venue_name'] ?></td>
 
                                                     <td class="text-center">
-                                                                <button type="button" value="<?php echo $row['problem_id']; ?>"
+                                                                <button type="button" value="<?php echo $row['id']; ?>"
                                                                     class="btn viewcomplaint"
                                                                     data-value="<?php echo $row['fac_id']; ?>"
                                                                     >
@@ -306,22 +288,20 @@ $result11 = mysqli_query($conn, $sql11);
                                                             </td>
 
 
-
-
                                                     <td class="text-center">
                                                     <button type="button" class="btn btn-light btn-sm showImage"
-                                                                    value="<?php echo $row['problem_id']; ?>" data-toggle="modal" data-target="#imageModal">
+                                                                    value="<?php echo $row['id']; ?>" data-toggle="modal" data-target="#imageModal">
                                                                     <i class="fas fa-image" style="font-size: 25px;"></i>
                                                                 </button>
                                                             </td>
 
                                                     <td class="text-center"><?php echo $row['date_of_reg'] ?></td>
 
-                                                    <td class="text-center"><?php echo $row['reason'] ?></td>
+                                                    <td class="text-center"><?php echo $row['p_reason'] ?></td>
                                                     <td class="text-center">
-                                                        <button type="button" value="<?php echo $row['problem_id'] ?>" class="btn btn-success userapprove"><i class="fas fa-check"></i></button>
+                                                        <button type="button" value="<?php echo $row['id'] ?>" class="btn btn-success userapprove"><i class="fas fa-check"></i></button>
 
-                                                        <button type="button" value="<?php echo $row['problem_id']; ?>" class="btn btn-danger userreject" data-toggle="modal" data-target="#rejectModal"><i class="fas fa-times"></i></button>
+                                                        <button type="button" value="<?php echo $row['id']; ?>" class="btn btn-danger userreject" data-toggle="modal" data-target="#rejectModal"><i class="fas fa-times"></i></button>
 
                                                     </td>
                                                 </tr>
@@ -429,11 +409,11 @@ $result11 = mysqli_query($conn, $sql11);
                                             <div class="card">
                                                 <div class="card-body" style="padding: 10px;">
                                                     <div class="filter-section" style="float:right">
-                                                        <label for="status-filter">Filter by Status:</label>
                                                         
                                                     </div>
 
                                                     <div class="table-responsive">
+                                                    <h5 class="card-title">Work's Assigned</h5>
                                                         <!-- Table for In Progress tasks -->
                                                         <table id="dataTable1" class="table table-striped table-bordered">
                                                         <thead style="background: linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color: white;">
@@ -495,10 +475,10 @@ $result11 = mysqli_query($conn, $sql11);
                                                             <td class="text-center"><?php echo $row['days_to_complete'] ?></td>
                                                             <td class="text-center">
                                                                 <button type="button" class="btn btn-light btn-sm showImage"
-                                                                    value="<?php echo $row7['id']; ?>" data-toggle="modal" data-target="#imageModal">
+                                                                    value="<?php echo $row['id']; ?>" data-toggle="modal" data-target="#imageModal">
                                                                     <i class="fas fa-image" style="font-size: 25px;"></i>
                                                                 </button>
-                                                                <button value="<?php echo $row7['id']; ?>" type="button"
+                                                                <button value="<?php echo $row['id']; ?>" type="button"
                                                                     class="btn btn-light btn-sm imgafter"
                                                                     data-toggle="modal">
                                                                     <i class="fas fa-images" style="font-size: 25px;"></i>
@@ -593,6 +573,30 @@ $result11 = mysqli_query($conn, $sql11);
     </footer>
     <!--Description id=problem-->
     <!-- Problem Description Modal -->
+
+        <!-- Reject Modal -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color: white;">
+                    <h5 class="modal-title" id="rejectModalLabel">Reject Problem</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="rejectreason">
+                    <div class="modal-body">
+                        <p>Are you sure you want to reject this problem?</p>
+                        <textarea name="reason" class="form-control" placeholder="Reason for rejection" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 <!-- Before Image Modal -->
@@ -869,9 +873,8 @@ $result11 = mysqli_query($conn, $sql11);
 
                 $.ajax({
                     type: "POST",
-                    url: "backend1.php",
+                    url: 'cms_backend.php?action=approve_user',
                     data: {
-                        'approve_user': true,
                         'user_id': user_id
                     },
                     success: function(response) {
@@ -899,24 +902,24 @@ $result11 = mysqli_query($conn, $sql11);
         });
 
         //reject 
+        $(document).on("click",".userreject",function(e){
+            e.preventDefault();
+            var id = $(this).val();
+            console.log("haii:",id);
+            $(document).data("user_id",id);
+        });
         $(document).on('submit', '#rejectreason', function(e) {
             e.preventDefault(); // Prevent default form submission
-
             // Create a FormData object from the form
             var formData = new FormData(this);
-
-            // Get the problem_id from the button that triggered the modal
-            var problem_id = $('#rejectModal').data('problem_id');
-            console.log(problem_id);
-
+            var user_id = $(document).data("user_id")
             // Append the problem_id to the FormData
-            formData.append("problem_id", problem_id);
-            formData.append("save_reason", true); // Add an identifier for the backend
+            formData.append("problem_id", user_id);
 
             // Perform the AJAX request
             $.ajax({
                 type: "POST",
-                url: "backend1.php", // Replace with your backend PHP script
+                url: 'cms_backend.php?action=reject_user', // Replace with your backend PHP script
                 data: formData,
                 processData: false, // Important: Prevent jQuery from processing the data
                 contentType: false, // Important: Prevent jQuery from setting the content type
@@ -940,6 +943,7 @@ $result11 = mysqli_query($conn, $sql11);
                             // Reinitialize the DataTable after the content is loaded
                             $('#addnewtask').DataTable();
                         });
+                        alertify.set('notifier', 'position', 'top-right');
                         alertify.error('Rejected Success');
                     } else {
                         // Handle errors
@@ -1072,7 +1076,7 @@ $result11 = mysqli_query($conn, $sql11);
             });
         });
 
-        //view descriotion
+    /*     //view descriotion
         $(document).on('click', '.viewDescription', function() {
             var complaintId = $(this).data('id'); // Get the complaint ID from the button's data-id attribute
             console.log(complaintId);
@@ -1087,7 +1091,7 @@ $result11 = mysqli_query($conn, $sql11);
                     $('#problem_description').val(response); // Populate the textarea with the fetched description
                 }
             });
-        });
+        }); */
 
         //comments query
 

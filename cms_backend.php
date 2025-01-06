@@ -59,7 +59,7 @@ switch ($action) {
             ]);
         }
         break;
-//before image
+        //before image
     case 'get_image':
         $problem_id = isset($_POST['problem_id']) ? $_POST['problem_id'] : ''; // Ensure problem_id is set
         // Validate problem_id
@@ -92,7 +92,7 @@ switch ($action) {
         exit;
         break;
 
-//After Image
+        //After Image
     case 'get_aimage':
         $problem_id = isset($_POST['problem2_id']) ? $_POST['problem2_id'] : '';
 
@@ -156,7 +156,7 @@ switch ($action) {
         }
         break;
 
-//worker Phone number
+        //worker Phone number
     case 'get_worker_phone':
         $complain_id = mysqli_real_escape_string($conn, $_POST['prblm_id']);
         $query = "
@@ -178,7 +178,7 @@ switch ($action) {
         break;
 
 
-    //Manager Backend
+        //Manager Backend
         //accapt complaint
     case 'manager_approve':
         $problem_id = $_POST['problem_id'];
@@ -210,16 +210,16 @@ switch ($action) {
         echo json_encode($response);
         break;
 
-         //when manager assign the complaint to wrong department -> Reassign department
+        //when manager assign the complaint to wrong department -> Reassign department
     case 'reassign_complaint':
         try {
             $id = $_POST['user_id'];
             $worker_dept = $_POST['worker'];
-    
+
             $query = "UPDATE manager SET worker_dept = ? WHERE problem_id = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param('si', $worker_dept, $id);
-    
+
             if ($stmt->execute()) {
                 echo json_encode(['status' => 200]);
             } else {
@@ -230,7 +230,7 @@ switch ($action) {
         }
         break;
 
-//Reject Complaint
+        //Reject Complaint
     case 'reject_complaint':
         try {
             $id = $_POST['id'];
@@ -259,24 +259,29 @@ switch ($action) {
     case 'principal_complaint':
         $problem_id = $_POST['id'];
         $reason = $_POST['reason'];
-        $insertQuery = "INSERT INTO comments (problem_id, reason) VALUES (?, ?)";
-        $stmt = $conn->prepare($insertQuery);
-        $stmt->bind_param('is', $problem_id, $reason);
-        if ($stmt->execute()) {
-            $updateQuery = "UPDATE complaints_detail SET status = '6' WHERE id = ?";
-            $stmtUpdate = $conn->prepare($updateQuery);
-            $stmtUpdate->bind_param('i', $problem_id);
-            if ($stmtUpdate->execute()) {
-                echo json_encode(['status' => 200, 'message' => 'Complaint accepted and status updated.']);
-            } else {
-                echo json_encode(['status' => 500, 'message' => 'Failed to update complaint status.']);
-            }
-            $stmtUpdate->close();
-        } else {
-            echo json_encode(['status' => 500, 'message' => 'Failed to add comment.']);
+
+        // Prepare the SQL query
+        $updateQuery = "UPDATE complaints_detail SET p_reason = ?, status = '6' WHERE id = ?";
+        $stmtUpdate = $conn->prepare($updateQuery);
+        if (!$stmtUpdate) {
+            echo json_encode(['status' => 500, 'message' => 'Failed to prepare statement.']);
+            break;
         }
-        $stmt->close();
+
+        // Bind parameters
+        $stmtUpdate->bind_param('si', $reason, $problem_id);
+
+        // Execute the query
+        if ($stmtUpdate->execute()) {
+            echo json_encode(['status' => 200, 'message' => 'Complaint accepted and status updated.']);
+        } else {
+            echo json_encode(['status' => 500, 'message' => 'Failed to update complaint status.']);
+        }
+
+        // Close the prepared statement
+        $stmtUpdate->close();
         break;
+
 
         //get rejected reason from principal
     case 'get_reject_reason':
@@ -294,7 +299,7 @@ switch ($action) {
         }
         break;
 
-       
+
         //add new workers
     case 'addworker':
         $name = $_POST['w_name'];
@@ -402,17 +407,17 @@ switch ($action) {
         echo json_encode($response);
         break;
 
-                //Extend Deadline for work inprogress
+        //Extend Deadline for work inprogress
     case 'extend_deadlinedate':
         try {
             $id = $_POST['id'];
             $dead_date = $_POST['extend_deadline'];
             $reason = $_POST['reason'];
-    
+
             $query = "UPDATE complaints_detail SET days_to_complete = ?, extend_date = '1', extend_reason = ? WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param('ssi', $dead_date, $reason, $id);
-    
+
             if ($stmt->execute()) {
                 echo json_encode(['status' => 200]);
             } else {
@@ -423,7 +428,7 @@ switch ($action) {
         }
         break;
 
-         //to view feedback from faculty
+        //to view feedback from faculty
     case 'facfeedview':
         $student_id = mysqli_real_escape_string($conn, $_POST['user_id']);
         $query = "SELECT * FROM complaints_detail WHERE id = ? AND status IN ('13', '14')";
@@ -472,18 +477,18 @@ switch ($action) {
         }
         $stmt->close();
         break;
-       
+
         //Manager feedback for complited work
     case 'manager_feedbacks':
         try {
             $id = $_POST['id'];
             $feedback = $_POST['feedback12'];
             $rating = $_POST['ratings'];
-    
+
             $query = "UPDATE complaints_detail SET mfeedback = ?, mrating = ?, status = '16' WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param('ssi', $feedback, $rating, $id);
-    
+
             if ($stmt->execute()) {
                 echo json_encode(['status' => 200]);
             } else {
@@ -492,28 +497,28 @@ switch ($action) {
         } catch (Exception $e) {
             echo json_encode(['status' => 500, 'message' => 'Error: ' . $e->getMessage()]);
         }
-       break; 
-       
-       
+        break;
 
-       //HOD backend
-       //hod accept
-       case 'approvebtn':
+
+
+        //HOD backend
+        //hod accept
+    case 'approvebtn':
         try {
             $id = $_POST['approve'];
-    
+
             // Prepare the SQL statement
             $query = "UPDATE complaints_detail SET status = ? WHERE id = ?";
             $stmt = $conn->prepare($query);
-    
+
             if (!$stmt) {
                 throw new Exception('Prepare statement failed: ' . $conn->error);
             }
-    
+
             // Bind parameters (status and id)
             $status = 4;
             $stmt->bind_param('ii', $status, $id);
-    
+
             // Execute the statement
             if ($stmt->execute()) {
                 $res = [
@@ -524,7 +529,7 @@ switch ($action) {
             } else {
                 throw new Exception('Execution failed: ' . $stmt->error);
             }
-    
+
             // Close the statement
             $stmt->close();
         } catch (Exception $e) {
@@ -537,447 +542,534 @@ switch ($action) {
         break;
 
         //HOD reject
-        case 'rejectbtn':
-            try {
-                $id = $_POST['reject_id'];
-                $feedback = $_POST['rejfeed'];
-        
-                // Prepare the SQL statement
-                $query = "UPDATE complaints_detail SET feedback = ?, status = ? WHERE id = ?";
-                $stmt = $conn->prepare($query);
-        
-                if (!$stmt) {
-                    throw new Exception('Prepare statement failed: ' . $conn->error);
-                }
-        
-                // Bind parameters
-                $status = 5;
-                $stmt->bind_param('sii', $feedback, $status, $id);
-        
-                // Execute the statement
-                if ($stmt->execute()) {
-                    $res = [
-                        'status' => 200,
-                        'message' => 'Details Updated Successfully'
-                    ];
-                    echo json_encode($res);
-                } else {
-                    throw new Exception('Execution failed: ' . $stmt->error);
-                }
-        
-                // Close the statement
-                $stmt->close();
-            } catch (Exception $e) {
+    case 'rejectbtn':
+        try {
+            $id = $_POST['reject_id'];
+            $feedback = $_POST['rejfeed'];
+
+            // Prepare the SQL statement
+            $query = "UPDATE complaints_detail SET feedback = ?, status = ? WHERE id = ?";
+            $stmt = $conn->prepare($query);
+
+            if (!$stmt) {
+                throw new Exception('Prepare statement failed: ' . $conn->error);
+            }
+
+            // Bind parameters
+            $status = 5;
+            $stmt->bind_param('sii', $feedback, $status, $id);
+
+            // Execute the statement
+            if ($stmt->execute()) {
                 $res = [
-                    'status' => 500,
-                    'message' => 'Error: ' . $e->getMessage()
+                    'status' => 200,
+                    'message' => 'Details Updated Successfully'
                 ];
                 echo json_encode($res);
+            } else {
+                throw new Exception('Execution failed: ' . $stmt->error);
             }
-            break;
 
-            //HOD seeproblem description
-            case 'seeproblem':
-                try {
-                    $student_id1 = $_POST['user_id'];
-            
-                    // Prepare the SQL statement
-                    $query = "SELECT * FROM complaints_detail WHERE id = ?";
-                    $stmt = $conn->prepare($query);
-            
-                    if (!$stmt) {
-                        throw new Exception('Prepare statement failed: ' . $conn->error);
-                    }
-            
-                    // Bind the parameter
-                    $stmt->bind_param('i', $student_id1);
-            
-                    // Execute the statement
-                    $stmt->execute();
-            
-                    // Get the result
-                    $result = $stmt->get_result();
-                    $User_data = $result->fetch_assoc();
-            
-                    if ($User_data) {
-                        $res = [
-                            'status' => 200,
-                            'message' => 'Details fetched successfully by ID',
-                            'data' => $User_data
-                        ];
-                    } else {
-                        $res = [
-                            'status' => 404,
-                            'message' => 'No details found for the given ID'
-                        ];
-                    }
-            
-                    echo json_encode($res);
-                } catch (Exception $e) {
-                    $res = [
-                        'status' => 500,
-                        'message' => 'Error: ' . $e->getMessage()
-                    ];
-                    echo json_encode($res);
-                } finally {
-                    if (isset($stmt) && $stmt instanceof mysqli_stmt) {
-                        $stmt->close();
-                    }
+            // Close the statement
+            $stmt->close();
+        } catch (Exception $e) {
+            $res = [
+                'status' => 500,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+            echo json_encode($res);
+        }
+        break;
+
+        //HOD seeproblem description
+    case 'seeproblem':
+        try {
+            $student_id1 = $_POST['user_id'];
+
+            // Prepare the SQL statement
+            $query = "SELECT * FROM complaints_detail WHERE id = ?";
+            $stmt = $conn->prepare($query);
+
+            if (!$stmt) {
+                throw new Exception('Prepare statement failed: ' . $conn->error);
+            }
+
+            // Bind the parameter
+            $stmt->bind_param('i', $student_id1);
+
+            // Execute the statement
+            $stmt->execute();
+
+            // Get the result
+            $result = $stmt->get_result();
+            $User_data = $result->fetch_assoc();
+
+            if ($User_data) {
+                $res = [
+                    'status' => 200,
+                    'message' => 'Details fetched successfully by ID',
+                    'data' => $User_data
+                ];
+            } else {
+                $res = [
+                    'status' => 404,
+                    'message' => 'No details found for the given ID'
+                ];
+            }
+
+            echo json_encode($res);
+        } catch (Exception $e) {
+            $res = [
+                'status' => 500,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+            echo json_encode($res);
+        } finally {
+            if (isset($stmt) && $stmt instanceof mysqli_stmt) {
+                $stmt->close();
+            }
+        }
+        break;
+
+        //Raise complaint in HOD
+    case 'addcomplaint':
+        try {
+            $hod = $hod_id;
+            $block_venue = mysqli_real_escape_string($conn, $_POST['block_venue']);
+            $venue_name = mysqli_real_escape_string($conn, $_POST['venue_name']);
+            $type_of_problem = mysqli_real_escape_string($conn, $_POST['type_of_problem']);
+            $problem_description = mysqli_real_escape_string($conn, $_POST['problem_description']);
+            $date_of_reg = mysqli_real_escape_string($conn, $_POST['date_of_reg']);
+            $status = 4; // Fixed status value
+
+            // Handle file upload
+            $images = "";
+            $uploadFileDir = './uploads/';
+
+            // Ensure the upload directory exists
+            if (!is_dir($uploadFileDir) && !mkdir($uploadFileDir, 0755, true)) {
+                throw new Exception('Failed to create upload directory.');
+            }
+
+            if (isset($_FILES['images']) && $_FILES['images']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['images']['tmp_name'];
+                $fileNameCmps = explode(".", $_FILES['images']['name']);
+                $fileExtension = strtolower(end($fileNameCmps));
+
+                // Validate file extension
+                $allowedExtensions = ['jpg', 'jpeg', 'png'];
+                if (!in_array($fileExtension, $allowedExtensions)) {
+                    throw new Exception('Invalid file extension. Allowed: jpg, jpeg, png.');
                 }
-                break;
 
-                //Raise complaint in HOD
-                case 'addcomplaint':
-                    try {
-                        $hod = $hod_id;
-                        $block_venue = mysqli_real_escape_string($conn, $_POST['block_venue']);
-                        $venue_name = mysqli_real_escape_string($conn, $_POST['venue_name']);
-                        $type_of_problem = mysqli_real_escape_string($conn, $_POST['type_of_problem']);
-                        $problem_description = mysqli_real_escape_string($conn, $_POST['problem_description']);
-                        $date_of_reg = mysqli_real_escape_string($conn, $_POST['date_of_reg']);
-                        $status = 4; // Fixed status value
-                
-                        // Handle file upload
-                        $images = "";
-                        $uploadFileDir = './uploads/';
-                
-                        // Ensure the upload directory exists
-                        if (!is_dir($uploadFileDir) && !mkdir($uploadFileDir, 0755, true)) {
-                            throw new Exception('Failed to create upload directory.');
-                        }
-                
-                        if (isset($_FILES['images']) && $_FILES['images']['error'] === UPLOAD_ERR_OK) {
-                            $fileTmpPath = $_FILES['images']['tmp_name'];
-                            $fileNameCmps = explode(".", $_FILES['images']['name']);
-                            $fileExtension = strtolower(end($fileNameCmps));
-                
-                            // Validate file extension
-                            $allowedExtensions = ['jpg', 'jpeg', 'png'];
-                            if (!in_array($fileExtension, $allowedExtensions)) {
-                                throw new Exception('Invalid file extension. Allowed: jpg, jpeg, png.');
-                            }
-                
-                            // Generate a unique filename
-                            $newFileName = uniqid('img_', true) . '.' . $fileExtension;
-                            $dest_path = $uploadFileDir . $newFileName;
-                
-                            // Move the uploaded file
-                            if (!move_uploaded_file($fileTmpPath, $dest_path)) {
-                                throw new Exception('Error moving the uploaded file.');
-                            }
-                
-                            $images = $newFileName;
-                        }
-                
-                        // Insert data into the database
-                        $query = "INSERT INTO complaints_detail (faculty_id, fac_id, block_venue, venue_name, type_of_problem, problem_description, images, date_of_reg, status) 
+                // Generate a unique filename
+                $newFileName = uniqid('img_', true) . '.' . $fileExtension;
+                $dest_path = $uploadFileDir . $newFileName;
+
+                // Move the uploaded file
+                if (!move_uploaded_file($fileTmpPath, $dest_path)) {
+                    throw new Exception('Error moving the uploaded file.');
+                }
+
+                $images = $newFileName;
+            }
+
+            // Insert data into the database
+            $query = "INSERT INTO complaints_detail (faculty_id, fac_id, block_venue, venue_name, type_of_problem, problem_description, images, date_of_reg, status) 
                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        $stmt = $conn->prepare($query);
-                        if (!$stmt) {
-                            throw new Exception('Failed to prepare statement: ' . $conn->error);
-                        }
-                
-                        // Bind parameters and execute
-                        $stmt->bind_param('iissssssi', $hod, $hod, $block_venue, $venue_name, $type_of_problem, $problem_description, $images, $date_of_reg, $status);
-                        if ($stmt->execute()) {
-                            echo json_encode(['status' => 200, 'message' => 'Success']);
-                        } else {
-                            throw new Exception('Error inserting data: ' . $stmt->error);
-                        }
-                
-                    } catch (Exception $e) {
-                        echo json_encode(['status' => 500, 'message' => 'Error: ' . $e->getMessage()]);
-                    }
-                    break;
+            $stmt = $conn->prepare($query);
+            if (!$stmt) {
+                throw new Exception('Failed to prepare statement: ' . $conn->error);
+            }
 
-                    //faculty info in hod
-                    case 'facinfohod':
-                        try {
-                            $student_id1 = $_POST['user_id'];
-                            $fac_id = $_POST['fac_id'];
-                    
-                            // Query 1: Fetch data from faculty table
-                            $query1 = "SELECT * FROM faculty WHERE id = ?";
-                            $stmt1 = $conn->prepare($query1);
-                    
-                            if (!$stmt1) {
-                                throw new Exception('Prepare statement for faculty failed: ' . $conn->error);
-                            }
-                    
-                            $stmt1->bind_param('i', $fac_id);
-                            $stmt1->execute();
-                            $result1 = $stmt1->get_result();
-                            $fac_data = $result1->fetch_assoc();
-                    
-                            // Query 2: Fetch data by joining complaints_detail and faculty_details tables
-                            $query = "SELECT cd.*, faculty_details.faculty_name, faculty_details.department, faculty_details.faculty_contact, faculty_details.faculty_mail
+            // Bind parameters and execute
+            $stmt->bind_param('iissssssi', $hod, $hod, $block_venue, $venue_name, $type_of_problem, $problem_description, $images, $date_of_reg, $status);
+            if ($stmt->execute()) {
+                echo json_encode(['status' => 200, 'message' => 'Success']);
+            } else {
+                throw new Exception('Error inserting data: ' . $stmt->error);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['status' => 500, 'message' => 'Error: ' . $e->getMessage()]);
+        }
+        break;
+
+        //faculty info in hod
+    case 'facinfohod':
+        try {
+            $student_id1 = $_POST['user_id'];
+            $fac_id = $_POST['fac_id'];
+
+            // Query 1: Fetch data from faculty table
+            $query1 = "SELECT * FROM faculty WHERE id = ?";
+            $stmt1 = $conn->prepare($query1);
+
+            if (!$stmt1) {
+                throw new Exception('Prepare statement for faculty failed: ' . $conn->error);
+            }
+
+            $stmt1->bind_param('i', $fac_id);
+            $stmt1->execute();
+            $result1 = $stmt1->get_result();
+            $fac_data = $result1->fetch_assoc();
+
+            // Query 2: Fetch data by joining complaints_detail and faculty_details tables
+            $query = "SELECT cd.*, faculty_details.faculty_name, faculty_details.department, faculty_details.faculty_contact, faculty_details.faculty_mail
                                       FROM complaints_detail cd
                                       JOIN faculty_details ON cd.faculty_id = faculty_details.faculty_id
                                       WHERE cd.id = ?";
-                            $stmt = $conn->prepare($query);
-                    
-                            if (!$stmt) {
-                                throw new Exception('Prepare statement for complaints_detail failed: ' . $conn->error);
-                            }
-                    
-                            $stmt->bind_param('i', $student_id1);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            $User_data = $result->fetch_assoc();
-                    
-                            if ($User_data || $fac_data) {
-                                $res = [
-                                    'status' => 200,
-                                    'message' => 'Details fetched successfully by ID',
-                                    'data' => $User_data,
-                                    'data1' => $fac_data
-                                ];
-                            } else {
-                                $res = [
-                                    'status' => 404,
-                                    'message' => 'No details found for the given IDs'
-                                ];
-                            }
-                    
-                            echo json_encode($res);
-                    
-                        } catch (Exception $e) {
-                            $res = [
-                                'status' => 500,
-                                'message' => 'Error: ' . $e->getMessage()
-                            ];
-                            echo json_encode($res);
-                        } finally {
-                            // Close prepared statements
-                            if (isset($stmt1) && $stmt1 instanceof mysqli_stmt) {
-                                $stmt1->close();
-                            }
-                            if (isset($stmt) && $stmt instanceof mysqli_stmt) {
-                                $stmt->close();
-                            }
-                        }
-                        break;
+            $stmt = $conn->prepare($query);
 
-                        //before image in HOD
-                        case 'bimgforhod':
-                            try {
-                                $task_id = $_POST['task_id'];
-                        
-                                // Validate the task ID
-                                if (empty($task_id) || !is_numeric($task_id)) {
-                                    echo json_encode(['status' => 400, 'message' => 'Task ID not provided or invalid']);
-                                    exit;
-                                }
-                        
-                                // Prepare the SQL query
-                                $query = "SELECT images FROM complaints_detail WHERE id = ?";
-                                $stmt = $conn->prepare($query);
-                        
-                                if (!$stmt) {
-                                    throw new Exception('Failed to prepare the statement: ' . $conn->error);
-                                }
-                        
-                                // Bind and execute
-                                $stmt->bind_param('i', $task_id);
-                                $stmt->execute();
-                                $result = $stmt->get_result();
-                        
-                                // Check if the image was found
-                                if ($result->num_rows > 0) {
-                                    $row = $result->fetch_assoc();
-                                    $image_path = $row['images'];
-                                    $res = [
-                                        "status" => 200,
-                                        "message" => "success",
-                                        "data" => $image_path
-                                    ];
-                                    echo json_encode($res);
-                                } else {
-                                    echo json_encode(['status' => 404, 'message' => 'No image found']);
-                                }
-                        
-                            } catch (Exception $e) {
-                                echo json_encode(['status' => 500, 'message' => 'Error: ' . $e->getMessage()]);
-                            } finally {
-                                // Close the statement if it was successfully created
-                                if (isset($stmt) && $stmt instanceof mysqli_stmt) {
-                                    $stmt->close();
-                                }
-                            }
-                            break;
+            if (!$stmt) {
+                throw new Exception('Prepare statement for complaints_detail failed: ' . $conn->error);
+            }
 
-                            //after image for hod
-                            case 'aimgforhod':
-                                $task_id = isset($_POST['task_id']) ? intval($_POST['task_id']) : '';
+            $stmt->bind_param('i', $student_id1);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $User_data = $result->fetch_assoc();
 
-                                if ($task_id == 0) {
-                                    echo json_encode(['status' => 400, 'message' => 'Task ID not provided or invalid']);
-                                    exit;
-                                }
-                            
-                                $query = "SELECT after_photo FROM worker_taskdet WHERE id = ?";
-                                $stmt = $conn->prepare($query);
-                            
-                                if (!$stmt) {
-                                    echo json_encode(['status' => 500, 'message' => 'Prepare statement failed: ' . $conn->error]);
-                                    exit;
-                                }
-                            
-                                $stmt->bind_param('i', $task_id);
-                                $stmt->execute();
-                                $result = $stmt->get_result();
-                            
-                                if ($result->num_rows > 0) {
-                                    $row = $result->fetch_assoc();
-                                    $image_path = 'imgafter/' . $row['after_photo'];
-                            
-                                    if (file_exists($image_path)) {
-                                        echo json_encode(['status' => 200, 'data' => ['after_photo' => $image_path]]);
-                                    } else {
-                                        echo json_encode(['status' => 404, 'message' => 'Image file not found on the server']);
-                                    }
-                                } else {
-                                    echo json_encode(['status' => 404, 'message' => 'No image found']);
-                                }
-                            
-                                $stmt->close();
-                                $conn->close();
-                                break;
+            if ($User_data || $fac_data) {
+                $res = [
+                    'status' => 200,
+                    'message' => 'Details fetched successfully by ID',
+                    'data' => $User_data,
+                    'data1' => $fac_data
+                ];
+            } else {
+                $res = [
+                    'status' => 404,
+                    'message' => 'No details found for the given IDs'
+                ];
+            }
 
-                                //reject feedback for hod
-                                case 'rejfeedback':
-                                    try {
-                                        $student_id5 = $_POST['user_idrej'];
-                                
-                                        // Prepare the query
-                                        $query = "SELECT * FROM complaints_detail WHERE id = ?";
-                                        $stmt = $conn->prepare($query);
-                                
-                                        if (!$stmt) {
-                                            throw new Exception('Prepare statement failed: ' . $conn->error);
-                                        }
-                                
-                                        // Bind the parameter
-                                        $stmt->bind_param('i', $student_id5);
-                                        $stmt->execute();
-                                
-                                        // Get the result
-                                        $result = $stmt->get_result();
-                                        $User_data = $result->fetch_assoc();
-                                
-                                        if ($User_data) {
-                                            $res = [
-                                                'status' => 200,
-                                                'message' => 'Details fetched successfully by ID',
-                                                'data' => $User_data
-                                            ];
-                                        } else {
-                                            $res = [
-                                                'status' => 404,
-                                                'message' => 'No details found for the given ID'
-                                            ];
-                                        }
-                                
-                                        echo json_encode($res);
-                                    } catch (Exception $e) {
-                                        $res = [
-                                            'status' => 500,
-                                            'message' => 'Error: ' . $e->getMessage()
-                                        ];
-                                        echo json_encode($res);
-                                    } finally {
-                                        // Close the prepared statement
-                                        if (isset($stmt) && $stmt instanceof mysqli_stmt) {
-                                            $stmt->close();
-                                        }
-                                    }
-                                    break;
+            echo json_encode($res);
+        } catch (Exception $e) {
+            $res = [
+                'status' => 500,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+            echo json_encode($res);
+        } finally {
+            // Close prepared statements
+            if (isset($stmt1) && $stmt1 instanceof mysqli_stmt) {
+                $stmt1->close();
+            }
+            if (isset($stmt) && $stmt instanceof mysqli_stmt) {
+                $stmt->close();
+            }
+        }
+        break;
+
+        //before image in HOD
+    case 'bimgforhod':
+        try {
+            $task_id = $_POST['task_id'];
+
+            // Validate the task ID
+            if (empty($task_id) || !is_numeric($task_id)) {
+                echo json_encode(['status' => 400, 'message' => 'Task ID not provided or invalid']);
+                exit;
+            }
+
+            // Prepare the SQL query
+            $query = "SELECT images FROM complaints_detail WHERE id = ?";
+            $stmt = $conn->prepare($query);
+
+            if (!$stmt) {
+                throw new Exception('Failed to prepare the statement: ' . $conn->error);
+            }
+
+            // Bind and execute
+            $stmt->bind_param('i', $task_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            // Check if the image was found
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $image_path = $row['images'];
+                $res = [
+                    "status" => 200,
+                    "message" => "success",
+                    "data" => $image_path
+                ];
+                echo json_encode($res);
+            } else {
+                echo json_encode(['status' => 404, 'message' => 'No image found']);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['status' => 500, 'message' => 'Error: ' . $e->getMessage()]);
+        } finally {
+            // Close the statement if it was successfully created
+            if (isset($stmt) && $stmt instanceof mysqli_stmt) {
+                $stmt->close();
+            }
+        }
+        break;
+
+        //after image for hod
+    case 'aimgforhod':
+        $task_id = isset($_POST['task_id']) ? intval($_POST['task_id']) : '';
+
+        if ($task_id == 0) {
+            echo json_encode(['status' => 400, 'message' => 'Task ID not provided or invalid']);
+            exit;
+        }
+
+        $query = "SELECT after_photo FROM worker_taskdet WHERE id = ?";
+        $stmt = $conn->prepare($query);
+
+        if (!$stmt) {
+            echo json_encode(['status' => 500, 'message' => 'Prepare statement failed: ' . $conn->error]);
+            exit;
+        }
+
+        $stmt->bind_param('i', $task_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $image_path = 'imgafter/' . $row['after_photo'];
+
+            if (file_exists($image_path)) {
+                echo json_encode(['status' => 200, 'data' => ['after_photo' => $image_path]]);
+            } else {
+                echo json_encode(['status' => 404, 'message' => 'Image file not found on the server']);
+            }
+        } else {
+            echo json_encode(['status' => 404, 'message' => 'No image found']);
+        }
+
+        $stmt->close();
+        $conn->close();
+        break;
+
+        //reject feedback for hod
+    case 'rejfeedback':
+        try {
+            $student_id5 = $_POST['user_idrej'];
+
+            // Prepare the query
+            $query = "SELECT * FROM complaints_detail WHERE id = ?";
+            $stmt = $conn->prepare($query);
+
+            if (!$stmt) {
+                throw new Exception('Prepare statement failed: ' . $conn->error);
+            }
+
+            // Bind the parameter
+            $stmt->bind_param('i', $student_id5);
+            $stmt->execute();
+
+            // Get the result
+            $result = $stmt->get_result();
+            $User_data = $result->fetch_assoc();
+
+            if ($User_data) {
+                $res = [
+                    'status' => 200,
+                    'message' => 'Details fetched successfully by ID',
+                    'data' => $User_data
+                ];
+            } else {
+                $res = [
+                    'status' => 404,
+                    'message' => 'No details found for the given ID'
+                ];
+            }
+
+            echo json_encode($res);
+        } catch (Exception $e) {
+            $res = [
+                'status' => 500,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+            echo json_encode($res);
+        } finally {
+            // Close the prepared statement
+            if (isset($stmt) && $stmt instanceof mysqli_stmt) {
+                $stmt->close();
+            }
+        }
+        break;
 
 
 
 
-            //EO backend
-            //reject task in EO
+        //EO backend
+        //reject task in EO
 
-            case 'rejfeedbackeo':
-                try {
-                    $id = $_POST['reject_id'];
-                    $feedback = $_POST['rejfeed'];
-            
-                    // Prepare the SQL statement
-                    $query = "UPDATE complaints_detail SET feedback = ?, status = ? WHERE id = ?";
-                    $stmt = $conn->prepare($query);
-            
-                    if (!$stmt) {
-                        throw new Exception('Prepare statement failed: ' . $conn->error);
-                    }
-            
-                    // Bind parameters
-                    $status = 23;
-                    $stmt->bind_param('sii', $feedback, $status, $id);
-            
-                    // Execute the statement
-                    if ($stmt->execute()) {
-                        $res = [
-                            'status' => 200,
-                            'message' => 'Details Updated Successfully'
-                        ];
-                        echo json_encode($res);
-                    } else {
-                        throw new Exception('Execution failed: ' . $stmt->error);
-                    }
-            
-                    // Close the statement
-                    $stmt->close();
-                } catch (Exception $e) {
-                    $res = [
-                        'status' => 500,
-                        'message' => 'Error: ' . $e->getMessage()
-                    ];
-                    echo json_encode($res);
-                }
-                break;
+    case 'rejfeedbackeo':
+        try {
+            $id = $_POST['reject_id'];
+            $feedback = $_POST['rejfeed'];
+
+            // Prepare the SQL statement
+            $query = "UPDATE complaints_detail SET feedback = ?, status = ? WHERE id = ?";
+            $stmt = $conn->prepare($query);
+
+            if (!$stmt) {
+                throw new Exception('Prepare statement failed: ' . $conn->error);
+            }
+
+            // Bind parameters
+            $status = 23;
+            $stmt->bind_param('sii', $feedback, $status, $id);
+
+            // Execute the statement
+            if ($stmt->execute()) {
+                $res = [
+                    'status' => 200,
+                    'message' => 'Details Updated Successfully'
+                ];
+                echo json_encode($res);
+            } else {
+                throw new Exception('Execution failed: ' . $stmt->error);
+            }
+
+            // Close the statement
+            $stmt->close();
+        } catch (Exception $e) {
+            $res = [
+                'status' => 500,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+            echo json_encode($res);
+        }
+        break;
 
 
-                //EO accept complaint
+        //EO accept complaint
+        case 'eoaccept':
+        try {
+            $id = $_POST['approve'];
 
-                try {
-                    $id = $_POST['approve'];
-            
-                    // Prepare the SQL statement
-                    $query = "UPDATE complaints_detail SET status = ? WHERE id = ?";
-                    $stmt = $conn->prepare($query);
-            
-                    if (!$stmt) {
-                        throw new Exception('Prepare statement failed: ' . $conn->error);
-                    }
-            
-                    // Bind parameters (status and id)
-                    $status = 22;
-                    $stmt->bind_param('ii', $status, $id);
-            
-                    // Execute the statement
-                    if ($stmt->execute()) {
-                        $res = [
-                            'status' => 200,
-                            'message' => 'Details Updated Successfully'
-                        ];
-                        echo json_encode($res);
-                    } else {
-                        throw new Exception('Execution failed: ' . $stmt->error);
-                    }
-            
-                    // Close the statement
-                    $stmt->close();
-                } catch (Exception $e) {
-                    $res = [
-                        'status' => 500,
-                        'message' => 'Error: ' . $e->getMessage()
-                    ];
-                    echo json_encode($res);
-                }
-                break;
+            // Prepare the SQL statement
+            $query = "UPDATE complaints_detail SET status = ? WHERE id = ?";
+            $stmt = $conn->prepare($query);
+
+            if (!$stmt) {
+                throw new Exception('Prepare statement failed: ' . $conn->error);
+            }
+
+            // Bind parameters (status and id)
+            $status = 22;
+            $stmt->bind_param('ii', $status, $id);
+
+            // Execute the statement
+            if ($stmt->execute()) {
+                $res = [
+                    'status' => 200,
+                    'message' => 'Details Updated Successfully'
+                ];
+                echo json_encode($res);
+            } else {
+                throw new Exception('Execution failed: ' . $stmt->error);
+            }
+
+            // Close the statement
+            $stmt->close();
+        } catch (Exception $e) {
+            $res = [
+                'status' => 500,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+            echo json_encode($res);
+        }
+        break;
+
+        //Principal Backend 
+        //Approval
+        case 'approve_user':
+            $customer_id = $_POST['user_id']; // Assuming the input is already sanitized before this point
+
+    // Begin the transaction
+    mysqli_begin_transaction($conn);
+
+    try {
+        // First query: Update the status in complaints_detail table
+        $query = "UPDATE complaints_detail SET status = ? WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $query);
+        if (!$stmt) {
+            throw new Exception('Failed to prepare statement: ' . mysqli_error($conn));
+        }
+
+        // Bind parameters (s for string, i for integer)
+        $status = '8';
+        mysqli_stmt_bind_param($stmt, 'si', $status, $customer_id);
+
+        // Execute the query
+        $query_run = mysqli_stmt_execute($stmt);
+        if (!$query_run) {
+            throw new Exception('Failed to execute query: ' . mysqli_stmt_error($stmt));
+        }
+
+        // Commit transaction if succeeded
+        mysqli_commit($conn);
+        echo json_encode(['status' => 200]);
+
+        // Close the prepared statement
+        mysqli_stmt_close($stmt);
+    } catch (Exception $e) {
+        // Rollback transaction on error
+        mysqli_rollback($conn);
+        $res = [
+            'status' => 500,
+            'message' => 'Error occurred: ' . $e->getMessage()
+        ];
+        echo json_encode($res);
+    }
+    break;
+
+    //Reject complaint
+    case 'reject_user':
+        try {
+            // Sanitize input values
+            $reason = $_POST['reason']; // Assuming validation and sanitization before this point
+            $customer_id = $_POST['problem_id']; // Assuming validation and sanitization before this point
+    
+            // Start the transaction
+            mysqli_begin_transaction($conn);
+    
+            // First query: Update the status in complaints_detail table
+            $query = "UPDATE complaints_detail SET feedback = ?, status = ? WHERE id = ?";
+            $stmt = mysqli_prepare($conn, $query);
+            if (!$stmt) {
+                throw new Exception('Failed to prepare statement: ' . mysqli_error($conn));
+            }
+    
+            // Bind parameters (s for string, i for integer)
+            $status = 19;
+            mysqli_stmt_bind_param($stmt, 'sii', $reason, $status, $customer_id);
+    
+            // Execute the query
+            $query_run = mysqli_stmt_execute($stmt);
+            if (!$query_run) {
+                throw new Exception('Failed to execute query: ' . mysqli_stmt_error($stmt));
+            }
+    
+            // Commit transaction if all succeeded
+            mysqli_commit($conn);
+            echo json_encode(['status' => 200]);
+    
+            // Close the prepared statement
+            mysqli_stmt_close($stmt);
+        } catch (Exception $e) {
+            // Rollback transaction on error
+            mysqli_rollback($conn);
+            $res = [
+                'status' => 500,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+            echo json_encode($res);
+        }
+        break;
         
+
+
+
 
 
 
