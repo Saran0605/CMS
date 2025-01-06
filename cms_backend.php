@@ -1507,7 +1507,7 @@ switch ($action) {
 
 
     //Showing feedback for faculty
-    case 'facgetfeedback':
+    case 'facdetfeedback':
         $id = $_POST['id'];
         $feedback = $_POST['satisfaction_feedback']; // Combined feedback and satisfaction value
         $rating = $_POST['ratings']; // Get rating

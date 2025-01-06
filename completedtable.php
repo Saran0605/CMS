@@ -1328,6 +1328,7 @@ if (isset($_POST['facdet'])) {
                 processData: false,
                 contentType: false,
                 success: function(response) {
+                    console.log(response);
                     if (response.status == 200) {
                         swal("Done!", "Feedback Submitted!", "success");
                         $('#feedback_modal').modal('hide');
