@@ -856,7 +856,7 @@ $result4 = mysqli_query($conn, $sql4);
             var user_id = $(this).val();
             console.log(user_id);
             $.ajax({
-                url: 'cms_backend1.php?action=wacceptcomp',
+                url: 'cms_backend.php?action=wacceptcomp',
                 type: "POST",
                 data: {
                     'user_id': user_id
@@ -906,7 +906,7 @@ $result4 = mysqli_query($conn, $sql4);
             console.log(user_id);
             $.ajax({
                 type: "POST",
-                url: 'cms_backend1.php?action=whviewcomp',
+                url: 'cms_backend.php?action=whviewcomp',
                 data: {
                     user_id: user_id,
                     fac_id: 1,

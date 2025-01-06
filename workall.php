@@ -1134,7 +1134,7 @@ $(function() {
     var taskId = $(this).data('task-id');
 
     $.ajax({
-        url: 'cms_backend1.php?action=wviewcomp',
+        url: 'cms_backend.php?action=wviewcomp',
         type: 'POST',
         data: {
             task_id: taskId
@@ -1238,7 +1238,7 @@ $(function() {
 
         // AJAX request to submit the form data
         $.ajax({
-            url: 'cms_backend1.php?action=workcompletion',
+            url: 'cms_backend.php?action=workcompletion',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -1339,7 +1339,7 @@ $("#statusnotapproved").load(location.href + " #statusnotapproved > *", function
 
             $.ajax({
                 type: "POST",
-                url: 'cms_backend1.php?action=wafterimage',
+                url: 'cms_backend.php?action=wafterimage',
                 data: {
                     'task_id': task_id
                 },
@@ -1379,7 +1379,7 @@ $("#statusnotapproved").load(location.href + " #statusnotapproved > *", function
 
             $.ajax({
                 type: "POST",
-                url: 'cms_backend1.php?action=wbeforeimg',
+                url: 'cms_backend.php?action=wbeforeimg',
                 data: {
                     'task_id': task_id
                 },
@@ -1447,7 +1447,7 @@ $("#statusnotapproved").load(location.href + " #statusnotapproved > *", function
             console.log(worker_dept);
 
             $.ajax({
-                url: 'cms_backend1.php?action=wworkerassign',
+                url: 'cms_backend.php?action=wworkerassign',
                 type: "POST",
                 data: {
                     "worker_dept": worker_dept

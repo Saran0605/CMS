@@ -1149,7 +1149,7 @@ if (isset($_POST['facdet'])) {
             var formData = new FormData(this);
             $.ajax({
                 type: "POST",
-                url: 'cms_backend1.php?action=facraisecomp',
+                url: 'cms_backend.php?action=facraisecomp',
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -1188,7 +1188,7 @@ if (isset($_POST['facdet'])) {
                 var user_id = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: 'cms_backend1.php?action=facdelcomp',
+                    url: 'cms_backend.php?action=facdelcomp',
                     data: {
                         'user_id': user_id
                     },
@@ -1226,7 +1226,7 @@ if (isset($_POST['facdet'])) {
                     console.log(problem_id); // Ensure this logs correctly
                     $.ajax({
                         type: "POST",
-                        url: 'cms_backend1.php?action=facbimg',
+                        url: 'cms_backend.php?action=facbimg',
                         data: {
                             problem_id: problem_id, // Correct POST key
                         },
@@ -1267,7 +1267,7 @@ if (isset($_POST['facdet'])) {
             console.log("Fetching worker details for id: " + id); // Debug log
             $.ajax({
                 type: "POST",
-                url: 'cms_backend1.php?action=facworkerdet',
+                url: 'cms_backend.php?action=facworkerdet',
                 data: {
                     'id': id
                 },
@@ -1320,7 +1320,7 @@ if (isset($_POST['facdet'])) {
             formData.append("ratings", store_rating);
             $.ajax({
                 type: "POST",
-                url: 'cms_backend1.php?action=facdetfeedback',
+                url: 'cms_backend.php?action=facdetfeedback',
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -1449,7 +1449,7 @@ $(document).on("submit","#passwordform",function(e){
     console.log("hii");
     $.ajax({
         type:"POST",
-        url: 'cms_backend1.php?action=facchangepass',
+        url: 'cms_backend.php?action=facchangepass',
         data:formdata,
         processData:false,
         contentType:false,
