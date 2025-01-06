@@ -1305,10 +1305,13 @@ if (isset($_POST['facdet'])) {
         $('#add_feedback').on('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
             var formData = new FormData(this);
+            console.log(formData);
 
             // Get the values of satisfaction and feedback
             var satisfactionValue = $('#satisfaction').val();
             var feedbackValue = $('#feedback').val();
+            console.log(satisfactionValue);
+            console.log(feedbackValue);
 
             // Combine satisfaction and feedback into a single value
             var combinedFeedback = satisfactionValue + ": " + feedbackValue;

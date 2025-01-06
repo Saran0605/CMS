@@ -4,9 +4,7 @@ session_start();
 if (isset($_POST['faculty_id'])) {
     $faculty_id = $_SESSION['faculty_id']; //'faculty_id' is stored in session
 }
-if (isset($_POST['hod_id'])) {
-    $hod_id =  $_session['hod_id']; //hod id in session
-}
+$hod_id = 12345;
 if (isset($_POST['eo_id'])) {
     $eo_id = $_session['eo_id']; //eo id in session
 }
@@ -964,7 +962,7 @@ switch ($action) {
         //EO accept complaint
         case 'eoaccept':
         try {
-            $id = $_POST['approve'];
+            $id = $_POST['approveid'];
 
             // Prepare the SQL statement
             $query = "UPDATE complaints_detail SET status = ? WHERE id = ?";
@@ -1600,57 +1598,5 @@ switch ($action) {
             echo json_encode($res);
             break;
         }
-            
-
-
-            
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

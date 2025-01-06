@@ -1396,7 +1396,6 @@ $rejected = mysqli_num_rows($result3);
                         type: "POST",
                         url: 'cms_backend.php?action=eoaccept',
                         data: {
-                            'approvefacbtn': true,
                             'approveid': approveid
                         },
                         success: function(response) {
