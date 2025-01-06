@@ -39,6 +39,25 @@ $row_count4 = mysqli_num_rows($result4);
 $facquery = "SELECT * FROM faculty WHERE dept=(SELECT department FROM faculty_details WHERE faculty_id='$faculty_id')";
 $resultfac = mysqli_query($conn,$facquery);
 
+if (isset($_POST['facdet'])) {
+    $sql8 =  "SELECT * FROM faculty WHERE dept=(SELECT department FROM faculty_details WHERE faculty_id='$faculty_id')";
+    $result8 = mysqli_query($conn, $sql8);
+
+    $options = '';
+    $options .= '<option value="">Select a Faculty</option>';
+
+
+
+    while ($row = mysqli_fetch_assoc($result8)) {
+        $options .= '<option value="' . $row['id'] . '">' . $row['id'] . ' - ' . $row['name'] . '</option>';
+
+    }
+
+
+    echo $options;
+    exit();  
+}
+
 
 ?>
 
@@ -906,29 +925,24 @@ $resultfac = mysqli_query($conn,$facquery);
 
 
                                 <!-- Before Image Modal -->
-<div class="modal fade" id="imageModal" tabindex="-1" role="dialog"
-    aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imageModalLabel">Image</h5>
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <img id="modalImage" src="" alt="Image" class="img-fluid"
-                    style="width: 100%; height: auto;">
-                <!-- src will be set dynamically -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                    data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+                                <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Image-Before</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img id="modalImage" src="" width="100%">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 
 
@@ -1135,12 +1149,12 @@ $resultfac = mysqli_query($conn,$facquery);
             var formData = new FormData(this);
             $.ajax({
                 type: "POST",
-                url: "fbackend.php",
+                url: 'cms_backend1.php?action=facraisecomp',
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    var res = typeof response === 'string' ? JSON.parse(response) : response;
+                    var res = jQuery.parseJSON(response);
                     if (res.status === 200) {
                         swal("Complaint Submitted!", "", "success");
                         $('#cmodal').modal('hide');
@@ -1174,9 +1188,8 @@ $resultfac = mysqli_query($conn,$facquery);
                 var user_id = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: "fbackend.php",
+                    url: 'cms_backend1.php?action=facdelcomp',
                     data: {
-                        'delete_user': true,
                         'user_id': user_id
                     },
                     success: function(response) {
@@ -1213,7 +1226,7 @@ $resultfac = mysqli_query($conn,$facquery);
                     console.log(problem_id); // Ensure this logs correctly
                     $.ajax({
                         type: "POST",
-                        url: 'cms_backend.php?action=get_image',
+                        url: 'cms_backend1.php?action=facbimg',
                         data: {
                             problem_id: problem_id, // Correct POST key
                         },
@@ -1254,9 +1267,8 @@ $resultfac = mysqli_query($conn,$facquery);
             console.log("Fetching worker details for id: " + id); // Debug log
             $.ajax({
                 type: "POST",
-                url: "fbackend.php", // Adjust if necessary
+                url: 'cms_backend1.php?action=facworkerdet',
                 data: {
-                    'get_worker_details': true,
                     'id': id
                 },
                 dataType: "json",
@@ -1293,7 +1305,6 @@ $resultfac = mysqli_query($conn,$facquery);
         $('#add_feedback').on('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
             var formData = new FormData(this);
-            formData.append("get_feedback", true);
 
             // Get the values of satisfaction and feedback
             var satisfactionValue = $('#satisfaction').val();
@@ -1309,7 +1320,7 @@ $resultfac = mysqli_query($conn,$facquery);
             formData.append("ratings", store_rating);
             $.ajax({
                 type: "POST",
-                url: "fbackend.php", // Adjust if necessary
+                url: 'cms_backend1.php?action=facdetfeedback',
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -1410,12 +1421,13 @@ $resultfac = mysqli_query($conn,$facquery);
             e.preventDefault();
 
             $.ajax({
-                url: "login_backend.php",
+                url: 'completedtable.php',
                 type: "POST",
-                data: {
-                    "fac": true,
+                data:{
+                    'facdet':true,
                 },
                 success: function(response) {
+                    console.log(response);
                     $('#cfaculty').html(response);
                 }
             });
@@ -1434,11 +1446,10 @@ $(document).on("submit","#passwordform",function(e){
     e.preventDefault();
     var formdata = new FormData(this);
     console.log(formdata);
-    formdata.append("changep",true);
     console.log("hii");
     $.ajax({
         type:"POST",
-        url:"fbackend.php",
+        url: 'cms_backend1.php?action=facchangepass',
         data:formdata,
         processData:false,
         contentType:false,

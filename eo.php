@@ -1394,7 +1394,7 @@ $rejected = mysqli_num_rows($result3);
                 function() {
                     $.ajax({
                         type: "POST",
-                        url: "backendfull.php",
+                        url: 'cms_backend.php?action=eoaccept',
                         data: {
                             'approvefacbtn': true,
                             'approveid': approveid

@@ -11,6 +11,26 @@ if (isset($_POST['eo_id'])) {
     $eo_id = $_session['eo_id']; //eo id in session
 }
 
+// Define the counter file path
+$counterFilePath = './uploads/counter.txt';
+
+// Function to get the next file number
+function getNextFileNumber($counterFilePath)
+{
+    if (file_exists($counterFilePath)) {
+        $file = fopen($counterFilePath, 'r');
+        $lastNumber = (int)fgets($file);
+        fclose($file);
+        $nextNumber = $lastNumber + 1;
+    } else {
+        $nextNumber = 1;
+    }
+    $file = fopen($counterFilePath, 'w');
+    fwrite($file, $nextNumber);
+    fclose($file);
+    return $nextNumber;
+}
+
 
 $action = $_GET['action'] ?? '';
 
@@ -294,4 +314,265 @@ switch ($action) {
 
     echo $options;
     break; 
+
+
+
+
+
+    //Faculty backend Starts
+    //faculty raise complaint
+    case 'facraisecomp':
+        $faculty_id = mysqli_real_escape_string($conn, $_POST['faculty_id']);
+    $fac_id = mysqli_real_escape_string($conn,$_POST['cfaculty']);
+    $fac_id = preg_replace('/\D/', '', $fac_id); 
+    $block_venue = mysqli_real_escape_string($conn, $_POST['block_venue']);
+    $venue_name = mysqli_real_escape_string($conn, $_POST['venue_name']);
+    $type_of_problem = mysqli_real_escape_string($conn, $_POST['type_of_problem']);
+    $problem_description = mysqli_real_escape_string($conn, $_POST['problem_description']);
+    $itemno = mysqli_real_escape_string($conn, $_POST['itemno']);
+    $date_of_reg = mysqli_real_escape_string($conn, $_POST['date_of_reg']);
+    $status = $_POST['status'];
+
+    // Handle file upload
+    $images = "";
+    $uploadFileDir = './uploads/';
+
+    if (!is_dir($uploadFileDir) && !mkdir($uploadFileDir, 0755, true)) {
+        echo json_encode(['status' => 500, 'message' => 'Failed to create upload directory.']);
+        exit;
+    }
+
+    if (isset($_FILES['images']) && $_FILES['images']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['images']['tmp_name'];
+        $fileNameCmps = explode(".", $_FILES['images']['name']);
+        $fileExtension = strtolower(end($fileNameCmps));
+
+        $allowedExtensions = ['jpg', 'jpeg', 'png'];
+        if (in_array($fileExtension, $allowedExtensions)) {
+            $nextFileNumber = getNextFileNumber($counterFilePath);
+            $newFileName = str_pad($nextFileNumber, 10, '0', STR_PAD_LEFT) . '.' . $fileExtension;
+            $dest_path = $uploadFileDir . $newFileName;
+
+            if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                $images = $newFileName;
+            } else {
+                echo json_encode(['status' => 500, 'message' => 'Error moving the uploaded file.']);
+                exit;
+            }
+        } else {
+            echo json_encode(['status' => 500, 'message' => 'Upload failed. Allowed types: jpg, jpeg, png.']);
+            exit;
+        }
+    }
+
+
+
+
+
+    // Insert data into the database
+    $query = "INSERT INTO complaints_detail (faculty_id,fac_id,block_venue, venue_name, type_of_problem, problem_description,itemno, images, date_of_reg, status) 
+              VALUES ('$faculty_id','$fac_id', '$block_venue', '$venue_name', '$type_of_problem', '$problem_description','$itemno', '$images', '$date_of_reg', '$status')";
+
+    if (mysqli_query($conn, $query)) {
+        echo json_encode(['status' => 200, 'message' => 'Success']);
+    } else {
+        echo json_encode(['status' => 500, 'message' => 'Error inserting data: ' . mysqli_error($conn)]);
+    }
+    break;
+
+
+
+    //Deleting the complaint
+    case 'facdelcomp':
+        $user_id = mysqli_real_escape_string($conn, $_POST['user_id']);
+    $query = "DELETE FROM complaints_detail WHERE id='$user_id'";
+
+    if (mysqli_query($conn, $query)) {
+        echo json_encode(['status' => 200, 'message' => 'Deleted successfully']);
+    } else {
+        echo json_encode(['status' => 500, 'message' => 'Error deleting data: ' . mysqli_error($conn)]);
+    }
+    break;
+
+
+
+    //Show before image 
+    case 'facbimg':
+        $id = $_POST['problem_id']; // Ensure id is set
+
+
+    // Query to fetch the image based on id
+    $query = "SELECT id, images FROM complaints_detail WHERE id = ?";
+    $stmt = $conn->prepare($query);
+
+    if (!$stmt) {
+        echo json_encode(['status' => 500, 'message' => 'Prepare statement failed: ' . $conn->error]);
+        exit;
+    }
+
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        echo json_encode(['status' => 200, 'data' => $row]);
+    } else {
+        echo json_encode(['status' => 500, 'message' => 'No image found']);
+    }
+
+    $stmt->close();
+    $conn->close();
+    break;
+
+
+    //worker details showing in faculty
+    case 'facworkerdet':
+        $id = $_POST['id'];
+
+    // SQL query to get worker details
+    $query = "
+    SELECT w.worker_first_name,
+     w.worker_mobile
+    FROM complaints_detail cd
+    INNER JOIN manager m ON cd.id = m.problem_id
+    INNER JOIN worker_details w ON m.worker_id = w.worker_id
+    WHERE cd.id = ?
+";
+
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $worker = $result->fetch_assoc();
+        echo json_encode(['status' => 200, 'worker_first_name' => $worker['worker_first_name'], 'worker_mobile' => $worker['worker_mobile']]);
+    } else {
+        echo json_encode(['status' => 500, 'message' => 'No worker details found for this id']);
+    }
+
+    $stmt->close();
+    $conn->close();
+    break;
+
+
+    //Showing feedback for faculty
+    case 'facgetfeedback':
+        $id = $_POST['id'];
+        $feedback = $_POST['satisfaction_feedback']; // Combined feedback and satisfaction value
+        $rating = $_POST['ratings']; // Get rating
+    
+        // Validate inputs
+        if (empty($id) || empty($feedback)) {
+            echo json_encode(['status' => 400, 'message' => 'Problem ID or Feedback is missing']);
+            exit;
+        }
+    
+        // Check if feedback already exists for the given id
+        $checkQuery = "SELECT feedback FROM complaints_detail WHERE id = ?";
+        $stmt = $conn->prepare($checkQuery);
+    
+        if (!$stmt) {
+            echo json_encode(['status' => 500, 'message' => 'Prepare statement failed: ' . $conn->error]);
+            exit;
+        }
+    
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $stmt->store_result();
+        $feedbackExists = $stmt->num_rows > 0; // Check if a row exists for the given id
+    
+        $stmt->close();
+    
+        // Update feedback if it exists, and set status to 14
+        if ($feedbackExists) {
+            // Update existing feedback, rating, and set status to 14
+            $query = "UPDATE complaints_detail SET feedback = ?, rating = ?, status = 14 WHERE id = ?";
+        } else {
+            // Insert new feedback (same query logic as update), with status set to 14
+            $query = "UPDATE complaints_detail SET feedback = ?, rating = ?, status = 14 WHERE id = ?";
+        }
+    
+        $stmt = $conn->prepare($query);
+    
+        if (!$stmt) {
+            echo json_encode(['status' => 500, 'message' => 'Prepare statement failed: ' . $conn->error]);
+            break;
+        }
+    
+        // Bind parameters including the combined feedback value, rating, and ID
+        $stmt->bind_param('sii', $feedback, $rating, $id);
+    
+        if ($stmt->execute()) {
+            echo json_encode(['status' => 200, 'message' => 'Feedback updated successfully']);
+        } else {
+            echo json_encode(['status' => 500, 'message' => 'Query failed: ' . $stmt->error]);
+        }
+    
+        $stmt->close();
+        $conn->close();
+        break;
+
+
+
+        //geting faculty id and name for assigning
+        $fac_id = $_SESSION['faculty_id'];
+
+        case 'getfaculty':
+            $sql8 =  "SELECT * FROM faculty WHERE dept=(SELECT department FROM faculty_details WHERE faculty_id='$fac_id')";
+            $result8 = mysqli_query($conn, $sql8);
+        
+            $options = '';
+            $options .= '<option value="">Select a Faculty</option>';
+        
+        
+        
+            while ($row = mysqli_fetch_assoc($result8)) {
+                $options .= '<option value="' . $row['id'] . '">' . $row['id'] . ' - ' . $row['name'] . '</option>';
+        
+            }
+        
+        
+            echo $options;
+            break;
+
+        //password change for faculty
+        case 'facchangepass':
+            $newp = $_POST['pass'];
+            $sql = "UPDATE faculty_details SET password = '$newp' WHERE faculty_id ='$fac_id'";
+            if(mysqli_query($conn,$sql)){
+                 $res=[
+                "status"=>200,
+                "message"=>"password changed",
+            ];
+            echo json_encode($res);
+            break;
+    }
+            
+
+
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
