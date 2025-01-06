@@ -863,8 +863,11 @@ $result4 = mysqli_query($conn, $sql4);
                 },
                 success: function(response) {
                     if (response.includes("Success")) {
-                        alertify.success("asigned successfully!");
-                        $('#principal_table').DataTable().destroy();
+                        Swal.fire({
+                    title: "Accepted!",
+                    text: "Work Started",
+                    icon: "success"
+                });                        $('#principal_table').DataTable().destroy();
                         $("#principal_table").load(location.href + " #principal_table > *",
                             function() {
                                 $('#principal_table').DataTable();
