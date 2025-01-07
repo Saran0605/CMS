@@ -6,7 +6,6 @@ if (!isset($_SESSION['faculty_id'])) {
     // Redirect to login page if not logged in
     header("Location: flogin.php");
     exit();
-
 }
 
 include('db.php'); // Include the configuration file
@@ -37,7 +36,7 @@ $row_count4 = mysqli_num_rows($result4);
 
 
 $facquery = "SELECT * FROM faculty WHERE dept=(SELECT department FROM faculty_details WHERE faculty_id='$faculty_id')";
-$resultfac = mysqli_query($conn,$facquery);
+$resultfac = mysqli_query($conn, $facquery);
 
 if (isset($_POST['facdet'])) {
     $sql8 =  "SELECT * FROM faculty WHERE dept=(SELECT department FROM faculty_details WHERE faculty_id='$faculty_id')";
@@ -50,12 +49,11 @@ if (isset($_POST['facdet'])) {
 
     while ($row = mysqli_fetch_assoc($result8)) {
         $options .= '<option value="' . $row['id'] . '">' . $row['id'] . ' - ' . $row['name'] . '</option>';
-
     }
 
 
     echo $options;
-    exit();  
+    exit();
 }
 
 
@@ -84,7 +82,7 @@ if (isset($_POST['facdet'])) {
 
     <link rel="icon" href="assets/images/favicon.png">
     <link rel="stylesheet" href="assets/css/styles.css">
-    
+
     <style>
         .nav-tabs .nav-link {
             color: #0033cc;
@@ -266,10 +264,10 @@ if (isset($_POST['facdet'])) {
                             <div class="dropdown-menu dropdown-menu-right user-dd animated">
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i>
                                     My Profile</a>
-                                <a  class="dropdown-item" href="javascript:void(0)"><i
+                                <a class="dropdown-item" href="javascript:void(0)"><i
                                         class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
-                                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#passmodal"><i class="ti-user m-r-5 m-l-5"></i>
-                                        Change Password</a>
+                                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#passmodal"><i class="ti-user m-r-5 m-l-5"></i>
+                                    Change Password</a>
                                 <div class="dropdown-divider"></div>
                             </div>
                         </li>
@@ -300,27 +298,27 @@ if (isset($_POST['facdet'])) {
             <!-- End Sidebar scroll-->
         </aside>
         <div class="modal fade" id="passmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" style="border-radius: 8px; border: 1px solid #ccc;">
-                        <div class="modal-header" style="background-color:rgb(5, 5, 5); border-bottom: 2px solid #e9ecef;">
-                            <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form id="passwordform">
-                            <div class="modal-body" style="padding: 20px; background-color: #f5f5f5;">
-                               
-                                <input type="text" name="pass" placeholder="Enter new Password" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px;">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" style="background-color: #6c757d; border: none; padding: 10px 20px;">Close</button>
-                                <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; padding: 10px 20px;">Save</button>
-                            </div>
-                        </form>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="border-radius: 8px; border: 1px solid #ccc;">
+                    <div class="modal-header" style="background-color:rgb(5, 5, 5); border-bottom: 2px solid #e9ecef;">
+                        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <form id="passwordform">
+                        <div class="modal-body" style="padding: 20px; background-color: #f5f5f5;">
+
+                            <input type="text" name="pass" placeholder="Enter new Password" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px;">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" style="background-color: #6c757d; border: none; padding: 10px 20px;">Close</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; padding: 10px 20px;">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
         <div class="page-wrapper">
             <div class="container-fluid">
                 <div class="card">
@@ -503,12 +501,12 @@ if (isset($_POST['facdet'])) {
                                                                 <input type="hidden" class="form-control" name="faculty_id" id="faculty_id" value="<?php echo $_SESSION['faculty_id']; ?>" readonly>
                                                             </div>
                                                             <div class="form-group" style="margin-bottom: 15px;">
-                                                            <label for="faculty" class="font-weight-bold" style="display: block; margin-bottom: 5px;">Choose Faculty <span style="color: red;">*</span></label>
-                                                            <select class="form-control"  name="cfaculty" id="cfaculty" style="width: 100%; height: 40px; border-radius: 4px; border: 1px solid #ccc;">
-                                                            </select>
-                                                        </div>
+                                                                <label for="faculty" class="font-weight-bold" style="display: block; margin-bottom: 5px;">Choose Faculty <span style="color: red;">*</span></label>
+                                                                <select class="form-control" name="cfaculty" id="cfaculty" style="width: 100%; height: 40px; border-radius: 4px; border: 1px solid #ccc;">
+                                                                </select>
+                                                            </div>
 
-                                                        <div class="mb-3">
+                                                            <div class="mb-3">
                                                                 <label for="type_of_problem" class="form-label">Type of Problem <span style="color: red;">*</span></label>
                                                                 <select class="form-control" name="type_of_problem" style="width: 100%; height:36px;">
                                                                     <option>Select</option>
@@ -595,7 +593,7 @@ if (isset($_POST['facdet'])) {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <?php
+                                                                <?php
                                                                 $s = 1;
                                                                 while ($row = mysqli_fetch_assoc($result5)) {
                                                                     $statusMessage = '';
@@ -630,10 +628,10 @@ if (isset($_POST['facdet'])) {
                                                                         <td class="text-center"><?php echo $row['problem_description']; ?></td>
                                                                         <td class="text-center"><?php echo $row['date_of_reg']; ?></td>
                                                                         <td class="text-center">
-                                                                        <button type="button" class="btn btn-light btn-sm showImage"
-                                                                    value="<?php echo $row['id']; ?>">
-                                                                    <i class="fas fa-image" style="font-size: 25px;"></i>
-                                                                </button>
+                                                                            <button type="button" class="btn btn-light btn-sm showImage"
+                                                                                value="<?php echo $row['id']; ?>">
+                                                                                <i class="fas fa-image" style="font-size: 25px;"></i>
+                                                                            </button>
                                                                         </td>
                                                                         <td class="text-center">
                                                                             <?php if ($row['status'] == 2) { ?>
@@ -643,8 +641,8 @@ if (isset($_POST['facdet'])) {
                                                                                     </button>
                                                                                 </center>
                                                                             <?php } else { ?>
-                                                                       
-                                                                       
+
+
                                                                                 <span class="badge bg-success" style="font-size: 1.2em; color: white; padding: 0.25em 0.5em;"><?php echo $statusMessage; ?></span>
                                                                             <?php } ?>
                                                                         </td>
@@ -662,33 +660,33 @@ if (isset($_POST['facdet'])) {
                                     </div>
                                 </div>
                                 <?php
-                                                                $s = 1;
-                                                                while ($row = mysqli_fetch_assoc($result5)) {
-                                                                    $statusMessage = '';
-                                                                    switch ($row['status']) {
-                                                                        case 1:
-                                                                            $statusMessage = 'Pending';
-                                                                            break;
-                                                                        case 2:
-                                                                            $statusMessage = 'Approved by Infra';
-                                                                            break;
-                                                                        case 4:
-                                                                            $statusMessage = 'Approved by HOD';
-                                                                            break;
-                                                                        case 6:
-                                                                            $statusMessage = 'Sent to Principal for Approval';
-                                                                            break;
-                                                                        case 8:
-                                                                            $statusMessage = 'Approved by Principal ';
-                                                                            break;
-                                                                        case 9:
-                                                                            $statusMessage = ' Approved by Manager';
-                                                                            break;
-                                                                        default:
-                                                                            $statusMessage = 'Unknown Status';
-                                                                    }
-                                                                }
-                                                                ?>
+                                $s = 1;
+                                while ($row = mysqli_fetch_assoc($result5)) {
+                                    $statusMessage = '';
+                                    switch ($row['status']) {
+                                        case 1:
+                                            $statusMessage = 'Pending';
+                                            break;
+                                        case 2:
+                                            $statusMessage = 'Approved by Infra';
+                                            break;
+                                        case 4:
+                                            $statusMessage = 'Approved by HOD';
+                                            break;
+                                        case 6:
+                                            $statusMessage = 'Sent to Principal for Approval';
+                                            break;
+                                        case 8:
+                                            $statusMessage = 'Approved by Principal ';
+                                            break;
+                                        case 9:
+                                            $statusMessage = ' Approved by Manager';
+                                            break;
+                                        default:
+                                            $statusMessage = 'Unknown Status';
+                                    }
+                                }
+                                ?>
 
 
 
@@ -765,7 +763,7 @@ if (isset($_POST['facdet'])) {
                                                                         <button type="button" disabled>Feedback</button>
                                                                     <?php } ?>
                                                                 </td>
-                                                            </tr>                                                            
+                                                            </tr>
                                                         <?php
                                                             $s++;
                                                         }
@@ -780,36 +778,36 @@ if (isset($_POST['facdet'])) {
 
                                 <!-- Extend Modal -->
                                 <div class="modal fade" id="extendModal" tabindex="-1" role="dialog"
-                                                                aria-labelledby="extendModalLabel" aria-hidden="true">
-                                                                <div class="modal-dialog" role="document">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title" id="extendModalLabel">Reject Complaint</h5>
-                                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                                aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            <form id="rejectForm">
-                                                                                <input type="hidden" name="id" id="complaint_id99">
-                                                                                <div class="form-group">
-                                                                                    <label for="rejectReason" class="form-label">Reason for
-                                                                                        Deadline Extension:</label> <br>
-                                                                                    <br>
-                                                                                    <textarea id="extendReasonTextarea" readonly style="width: 100%; height: 80px; font-size: 14px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; color: #333; resize: none; overflow-y: auto;"></textarea>
+                                    aria-labelledby="extendModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="extendModalLabel">Reject Complaint</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="rejectForm">
+                                                    <input type="hidden" name="id" id="complaint_id99">
+                                                    <div class="form-group">
+                                                        <label for="rejectReason" class="form-label">Reason for
+                                                            Deadline Extension:</label> <br>
+                                                        <br>
+                                                        <textarea id="extendReasonTextarea" readonly style="width: 100%; height: 80px; font-size: 14px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; color: #333; resize: none; overflow-y: auto;"></textarea>
 
 
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button type="button" class="btn btn-secondary"
-                                                                                        data-dismiss="modal">Close</button>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 
                                 <!------------------Work in Progress Table Ends----------------->
@@ -1219,46 +1217,46 @@ if (isset($_POST['facdet'])) {
         });
 
 
-       
-       //Before image
-       $(document).on("click", ".showImage", function() {
-                    var problem_id = $(this).val(); // Get the problem_id from button value
-                    console.log(problem_id); // Ensure this logs correctly
-                    $.ajax({
-                        type: "POST",
-                        url: 'cms_backend.php?action=facbimg',
-                        data: {
-                            problem_id: problem_id, // Correct POST key
-                        },
-                        dataType: "json", // Automatically parses JSON responses
-                        success: function(response) {
-                            console.log(response); // Log the parsed JSON response
-                            if (response.status == 200) {
-                                // Dynamically set the image source
-                                $("#modalImage").attr("src", "uploads/" + response.data.images);
-                                // Show the modal
-                                $("#imageModal").modal("show");
-                            } else {
-                                // Handle case where no image is found
-                                alert(
-                                    response.message || "An error occurred while retrieving the image."
-                                );
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            // Log the full error details for debugging
-                            console.error("AJAX Error: ", xhr.responseText);
-                            alert(
-                                "An error occurred: " +
-                                error +
-                                "\nStatus: " +
-                                status +
-                                "\nDetails: " +
-                                xhr.responseText
-                            );
-                        },
-                    });
-                });
+
+        //Before image
+        $(document).on("click", ".showImage", function() {
+            var problem_id = $(this).val(); // Get the problem_id from button value
+            console.log(problem_id); // Ensure this logs correctly
+            $.ajax({
+                type: "POST",
+                url: 'cms_backend.php?action=facbimg',
+                data: {
+                    problem_id: problem_id, // Correct POST key
+                },
+                dataType: "json", // Automatically parses JSON responses
+                success: function(response) {
+                    console.log(response); // Log the parsed JSON response
+                    if (response.status == 200) {
+                        // Dynamically set the image source
+                        $("#modalImage").attr("src", "uploads/" + response.data.images);
+                        // Show the modal
+                        $("#imageModal").modal("show");
+                    } else {
+                        // Handle case where no image is found
+                        alert(
+                            response.message || "An error occurred while retrieving the image."
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Log the full error details for debugging
+                    console.error("AJAX Error: ", xhr.responseText);
+                    alert(
+                        "An error occurred: " +
+                        error +
+                        "\nStatus: " +
+                        status +
+                        "\nDetails: " +
+                        xhr.responseText
+                    );
+                },
+            });
+        });
 
 
         // Display worker details in work in progress
@@ -1329,9 +1327,14 @@ if (isset($_POST['facdet'])) {
                 contentType: false,
                 success: function(response) {
                     console.log(response);
-                    if (response.status == 200) {
+                    var res = jQuery.parseJSON(response);
+                    if (res.status == 200) {
                         swal("Done!", "Feedback Submitted!", "success");
+                        $("#add_feedback")[0].reset();
                         $('#feedback_modal').modal('hide');
+                        $('.modal-backdrop').remove(); // Remove lingering backdrop
+
+
                         $('#navref1').load(location.href + " #navref1");
                         $('#navref3').load(location.href + " #navref3");
                         $('#navref4').load(location.href + " #navref4");
@@ -1421,14 +1424,14 @@ if (isset($_POST['facdet'])) {
         });
 
 
-        $(document).on('click','.fac',function(e){
+        $(document).on('click', '.fac', function(e) {
             e.preventDefault();
 
             $.ajax({
                 url: 'completedtable.php',
                 type: "POST",
-                data:{
-                    'facdet':true,
+                data: {
+                    'facdet': true,
                 },
                 success: function(response) {
                     console.log(response);
@@ -1438,41 +1441,37 @@ if (isset($_POST['facdet'])) {
         });
 
 
-        $(document).on('click', '.extenddeadline', function () {
-    // Get the reason from the button's data attribute
-    var reason = $(this).data('reason');
+        $(document).on('click', '.extenddeadline', function() {
+            // Get the reason from the button's data attribute
+            var reason = $(this).data('reason');
 
-    // Set the reason in the modal's textarea
-    $('#extendReasonTextarea').val(reason);
-});
+            // Set the reason in the modal's textarea
+            $('#extendReasonTextarea').val(reason);
+        });
 
-$(document).on("submit","#passwordform",function(e){
-    e.preventDefault();
-    var formdata = new FormData(this);
-    console.log(formdata);
-    console.log("hii");
-    $.ajax({
-        type:"POST",
-        url: 'cms_backend.php?action=facchangepass',
-        data:formdata,
-        processData:false,
-        contentType:false,
-        success:function(response){
-            console.log(response);
-            var res = jQuery.parseJSON(response);
-            if(res.status==200){
-                $('#passmodal').modal('hide');
-                swal("Done!", "Password Changed!", "success");
-                          }
-            else{
-                alert('error');
-            }
-        }
-    })
-})
-
-
-
+        $(document).on("submit", "#passwordform", function(e) {
+            e.preventDefault();
+            var formdata = new FormData(this);
+            console.log(formdata);
+            console.log("hii");
+            $.ajax({
+                type: "POST",
+                url: 'cms_backend.php?action=facchangepass',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+                    var res = jQuery.parseJSON(response);
+                    if (res.status == 200) {
+                        $('#passmodal').modal('hide');
+                        swal("Done!", "Password Changed!", "success");
+                    } else {
+                        alert('error');
+                    }
+                }
+            })
+        })
     </script>
 </body>
 <div scrible-ignore="" id="skribel_annotation_ignore_browserExtensionFlag" class="skribel_chromeExtension"
