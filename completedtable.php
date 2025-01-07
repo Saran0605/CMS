@@ -19,7 +19,7 @@ $result = mysqli_query($conn, $query);
 $sql5 = "SELECT * FROM complaints_detail WHERE status IN (1,2,4,6,8,9,22) AND faculty_id = '$faculty_id'";
 $sql1 = "SELECT * FROM complaints_detail WHERE status IN (7,10,11,17,18) AND faculty_id = '$faculty_id'";
 $sql2 = "SELECT * FROM complaints_detail WHERE status = 16 AND faculty_id = '$faculty_id'";
-$sql3 = "SELECT * FROM complaints_detail WHERE status IN (3,5,19,20) AND faculty_id = '$faculty_id'";
+$sql3 = "SELECT * FROM complaints_detail WHERE status IN (23,5,19,20) AND faculty_id = '$faculty_id'";
 $sql4 = "SELECT * FROM complaints_detail WHERE status = 15 AND faculty_id = '$faculty_id'";
 
 $result5 = mysqli_query($conn, $sql5);
@@ -982,6 +982,9 @@ if (isset($_POST['facdet'])) {
                                                         case 5:
                                                             $statusMessage = 'Rejected by HOD';
                                                             break;
+                                                        case 23:
+                                                                $statusMessage = 'Rejected by EO';
+                                                                break;
                                                         case 19:
                                                             $statusMessage = 'Rejected by Principal';
                                                             break;
@@ -999,7 +1002,7 @@ if (isset($_POST['facdet'])) {
                                                         <td class="text-center"><?php echo $row['venue_name']; ?></td>
                                                         <td class="text-center"><?php echo $row['problem_description']; ?></td>
                                                         <td class="text-center">
-                                                            <span class="badge" style="background-color: #ff6666; font-size: 1.2em; color: #000000; padding: 0.25em 0.5em;"><?php echo $statusMessage; ?></span>
+                                                            <span class="badge" style="background-color: #ff6666; font-size: 1.2em; color: white; padding: 0.25em 0.5em;"><?php echo $statusMessage; ?></span>
                                                         </td>
                                                         <td class="text-center"><?php echo $row['feedback']; ?></td>
                                                     </tr>
