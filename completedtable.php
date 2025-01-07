@@ -12,6 +12,11 @@ include('db.php'); // Include the configuration file
 
 // Fetch complaints only for this faculty (if necessary)
 $faculty_id = $_SESSION['faculty_id']; // Assuming 'faculty_id' is stored in session
+$qrydata = "SELECT * FROM faculty WHERE id='$faculty_id'";
+$run = mysqli_query($conn,$qrydata);
+$runs = mysqli_fetch_array($run);
+$dept = $runs['dept'];
+
 
 $query = "SELECT * FROM complaints_detail WHERE faculty_id = '$faculty_id'";
 $result = mysqli_query($conn, $query);
@@ -35,11 +40,11 @@ $row_count3 = mysqli_num_rows($result3);
 $row_count4 = mysqli_num_rows($result4);
 
 
-$facquery = "SELECT * FROM faculty WHERE dept=(SELECT department FROM faculty_details WHERE faculty_id='$faculty_id')";
-$resultfac = mysqli_query($conn, $facquery);
+/* $facquery = "SELECT * FROM faculty WHERE dept =(SELECT dept from faculty WHERE id='$faculty_id')";
+$resultfac = mysqli_query($conn, $facquery); */
 
 if (isset($_POST['facdet'])) {
-    $sql8 =  "SELECT * FROM faculty WHERE dept=(SELECT department FROM faculty_details WHERE faculty_id='$faculty_id')";
+    $sql8 =  "SELECT * FROM faculty WHERE dept = '$dept'";
     $result8 = mysqli_query($conn, $sql8);
 
     $options = '';
@@ -581,9 +586,28 @@ if (isset($_POST['facdet'])) {
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div>
+                                                        <?php
+                                                        $bid = '5';
+                                                        if($bid == 1){
+
+                                                            ?>
+                                                            <button type="button" disabled class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Compliant</button>
+                                                        <br>
+                                                        <br>
+                                                        <?php 
+                                                    }
+                                                    else{
+                                                        ?>
                                                         <button type="button" class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Compliant</button>
                                                         <br>
                                                         <br>
+                                                    <?php
+                                                    }
+                                                     ?>
+
+                                                        
+                                                        
+                                                        
                                                     </div>
                                                     <div class="table-responsive">
                                                         <table id="user" class="table table-bordered table-striped">
