@@ -1447,7 +1447,7 @@ $("#statusnotapproved").load(location.href + " #statusnotapproved > *", function
             console.log(worker_dept);
 
             $.ajax({
-                url: 'cms_backend.php?action=wrestart',
+                url: 'cms_backend.php?action=wbeforeimg',
                 type: "POST",
                 data: {
                     "worker_dept": worker_dept
@@ -1468,7 +1468,7 @@ $("#statusnotapproved").load(location.href + " #statusnotapproved > *", function
                 console.log(taskId);
 
                 $.ajax({
-                    url: 'backend.php',
+                    url: 'cms_backend.php?action=wrestart',
                     type: 'POST',
                     data: {
                         start_work: true,
