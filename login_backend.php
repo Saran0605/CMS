@@ -15,20 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = mysqli_fetch_array($result);
 
     if($user['role']=='eo'){
-        $_SESSION['faculty_id'] = $faculty_id;
+        $_SESSION['eo_id'] = $faculty_id;
         header("Location: eo.php"); 
         exit();
     }
 
     elseif($user['role']=='manager'){
-        $_SESSION['faculty_id'] = $faculty_id;
+        $_SESSION['manager_id'] = $faculty_id;
         header("Location: manager.php"); 
         exit();
     }
 
     elseif($user['role']=='hod'){
         $_SESSION['faculty_dept'] = $faculty_dept;
-        $_SESSION['faculty_id'] = $faculty_id;
+        $_SESSION['hod_id'] = $faculty_id;
         header("Location: hod.php"); 
         exit();
     }

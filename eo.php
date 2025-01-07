@@ -1,7 +1,7 @@
 <?php
 include("db.php");
 session_start();
-$_session['eo_id'] = 12345;
+$_session['eo_id'] = 123456;
 $eo_id = $_session['eo_id'];
 $sql = "
 SELECT cd.*, faculty_details.faculty_name, faculty_details.department, faculty_details.faculty_contact, faculty_details.faculty_mail
@@ -1437,7 +1437,7 @@ $rejected = mysqli_num_rows($result3);
             formData.append("hod",true);
             $.ajax({
                 type: "POST",
-                url: 'cms_backend.php?action=addcomplaint',
+                url: 'cms_backend.php?action=EOaddcomplaint',
                 data: formData,
                 processData: false,
                 contentType: false,

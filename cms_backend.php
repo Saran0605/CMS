@@ -4,10 +4,7 @@ session_start();
 if (isset($_POST['faculty_id'])) {
     $faculty_id = $_SESSION['faculty_id']; //'faculty_id' is stored in session
 }
-$hod_id = 12345;
-if (isset($_POST['eo_id'])) {
-    $eo_id = $_session['eo_id']; //eo id in session
-}
+
 
 // Define the counter file path
 $counterFilePath = './uploads/counter.txt';
@@ -652,7 +649,7 @@ switch ($action) {
         //Raise complaint in HOD
     case 'addcomplaint':
         try {
-            $hod = $hod_id;
+            $hod = 12345;
             $block_venue = mysqli_real_escape_string($conn, $_POST['block_venue']);
             $venue_name = mysqli_real_escape_string($conn, $_POST['venue_name']);
             $type_of_problem = mysqli_real_escape_string($conn, $_POST['type_of_problem']);
@@ -917,8 +914,70 @@ switch ($action) {
 
 
         //EO backend
-        //reject task in EO
+        //EO raise complaint
+        case 'EOaddcomplaint':
+            try {
+                $eo_id = 123456;
+                $block_venue = mysqli_real_escape_string($conn, $_POST['block_venue']);
+                $venue_name = mysqli_real_escape_string($conn, $_POST['venue_name']);
+                $type_of_problem = mysqli_real_escape_string($conn, $_POST['type_of_problem']);
+                $problem_description = mysqli_real_escape_string($conn, $_POST['problem_description']);
+                $date_of_reg = mysqli_real_escape_string($conn, $_POST['date_of_reg']);
+                $status = 22; // Fixed status value
+    
+                // Handle file upload
+                $images = "";
+                $uploadFileDir = './uploads/';
+    
+                // Ensure the upload directory exists
+                if (!is_dir($uploadFileDir) && !mkdir($uploadFileDir, 0755, true)) {
+                    throw new Exception('Failed to create upload directory.');
+                }
+    
+                if (isset($_FILES['images']) && $_FILES['images']['error'] === UPLOAD_ERR_OK) {
+                    $fileTmpPath = $_FILES['images']['tmp_name'];
+                    $fileNameCmps = explode(".", $_FILES['images']['name']);
+                    $fileExtension = strtolower(end($fileNameCmps));
+    
+                    // Validate file extension
+                    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+                    if (!in_array($fileExtension, $allowedExtensions)) {
+                        throw new Exception('Invalid file extension. Allowed: jpg, jpeg, png.');
+                    }
+    
+                    // Generate a unique filename
+                    $newFileName = uniqid('img_', true) . '.' . $fileExtension;
+                    $dest_path = $uploadFileDir . $newFileName;
+    
+                    // Move the uploaded file
+                    if (!move_uploaded_file($fileTmpPath, $dest_path)) {
+                        throw new Exception('Error moving the uploaded file.');
+                    }
+    
+                    $images = $newFileName;
+                }
+    
+                // Insert data into the database
+                $query = "INSERT INTO complaints_detail (faculty_id, fac_id, block_venue, venue_name, type_of_problem, problem_description, images, date_of_reg, status) 
+                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($query);
+                if (!$stmt) {
+                    throw new Exception('Failed to prepare statement: ' . $conn->error);
+                }
+    
+                // Bind parameters and execute
+                $stmt->bind_param('iissssssi', $eo_id, $eo_id, $block_venue, $venue_name, $type_of_problem, $problem_description, $images, $date_of_reg, $status);
+                if ($stmt->execute()) {
+                    echo json_encode(['status' => 200, 'message' => 'Success']);
+                } else {
+                    throw new Exception('Error inserting data: ' . $stmt->error);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['status' => 500, 'message' => 'Error: ' . $e->getMessage()]);
+            }
+            break;
 
+        //reject task in EO
     case 'rejfeedbackeo':
         try {
             $id = $_POST['reject_id'];
