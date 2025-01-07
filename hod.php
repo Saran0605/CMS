@@ -1,7 +1,7 @@
 <?php
 include("db.php");
 session_start();
-$_session['hod_id']= 12345;
+$_session['hod_id'] = 12345;
 $hod_id =  $_session['hod_id'];
 $sql = "
 SELECT cd.*, faculty_details.faculty_name, faculty_details.department, faculty_details.faculty_contact, faculty_details.faculty_mail
@@ -383,7 +383,7 @@ $rejected = mysqli_num_rows($result3);
                                                 </div>
                                             </div>
 
-                                            
+
                                             <!-------------------------pending tab---------------------------->
                                             <div class="tab-pane p-20" id="pending" role="tabpanel">
                                                 <div class="row">
@@ -397,7 +397,7 @@ $rejected = mysqli_num_rows($result3);
                                                                 </h4>
                                                             </div>
 
-                                                            
+
 
                                                             <div class="card-body">
                                                                 <div class="table-container">
@@ -1064,576 +1064,579 @@ $rejected = mysqli_num_rows($result3);
     </div>
 
     <div class="tab-pane p-20" id="home" role="tabpanel">
-                                    <div class="modal fade" id="raisemodal" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header" style="background:linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%);background-color:#7460ee;">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Raise Complaint</h5>
-                                                    <button class="spbutton" type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close">
-                                                </div>
-                                                <div>
-                                                    <form id="addnewuser" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
-                                                        <div class="modal-body">
-                                                            
-                                                            
+        <div class="modal fade" id="raisemodal" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background: linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color: white;">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Raise Complaint</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div>
+                        <form id="addnewuser" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
+                            <div class="modal-body">
 
-                                                            <div class="mb-3">
-                                                                <label for="block" class="form-label">Block <span style="color: red;">*</span></label>
-                                                                <input type="text" class="form-control" name="block_venue" placeholder="Eg:RK-206" required>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="venue" class="form-label">Venue <span style="color: red;">*</span></label>
-                                                                <select id="dropdown" class="form-control" name="venue_name" onchange="checkIfOthers()"
-                                                                    style="width: 100%; height:36px;">
-                                                                    <option>Select</option>
-                                                                    <option value="class">Class Room</option>
-                                                                    <option value="department">Department</option>
-                                                                    <option value="lab">Lab</option>
-                                                                    <option value="staff_room">Staff Room</option>
-                                                                    <option id="oth" value="Other">Others</option>
-                                                                </select>
-                                                            </div>
 
-                            <div id="othersInput" style="display: none;">
-                                <label class="form-label" for="otherValue">Please specify: <span style="color: red;">*</span></label>
-                                <input class="form-control" type="text" id="otherValue" name="otherValue"> <br>
+
+                                <div class="mb-3">
+                                    <label for="block" class="form-label">Block <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="block_venue" placeholder="Eg:RK-206" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="venue" class="form-label">Venue <span style="color: red;">*</span></label>
+                                    <select id="dropdown" class="form-control" name="venue_name" onchange="checkIfOthers()"
+                                        style="width: 100%; height:36px;">
+                                        <option>Select</option>
+                                        <option value="class">Class Room</option>
+                                        <option value="department">Department</option>
+                                        <option value="lab">Lab</option>
+                                        <option value="staff_room">Staff Room</option>
+                                        <option id="oth" value="Other">Others</option>
+                                    </select>
+                                </div>
+
+                                <div id="othersInput" style="display: none;">
+                                    <label class="form-label" for="otherValue">Please specify: <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" id="otherValue" name="otherValue"> <br>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="type_of_problem" class="form-label">Type of Problem <span style="color: red;">*</span></label>
+                                    <select class="form-control" name="type_of_problem" style="width: 100%; height:36px;">
+                                        <option>Select</option>
+                                        <option value="elecrtical">ELECTRICAL</option>
+                                        <option value="civil">CIVIL</option>
+                                        <option value="itkm">IT INFRA </option>
+                                        <option value="transport">TRANSPORT</option>
+                                        <option value="house">HOUSE KEEPING </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Problem Description <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" name="problem_description" placeholder="Enter Description" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="images" class="form-label">Image <span style="color: red;">*</span> </label>
+                                    <input type="file" class="form-control" name="images" id="images" onchange="validateSize(this)" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="hidden" class="form-control" name="date_of_reg" id="date_of_reg" required>
+                                </div>
                             </div>
-
-                                                            <div class="mb-3">
-                                                                <label for="type_of_problem" class="form-label">Type of Problem <span style="color: red;">*</span></label>
-                                                                <select class="form-control" name="type_of_problem" style="width: 100%; height:36px;">
-                                                                    <option>Select</option>
-                                                                    <option value="elecrtical">ELECTRICAL</option>
-                                                                    <option value="civil">CIVIL</option>
-                                                                    <option value="itkm">IT INFRA </option>
-                                                                    <option value="transport">TRANSPORT</option>
-                                                                    <option value="house">HOUSE KEEPING </option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="description" class="form-label">Problem Description <span style="color: red;">*</span></label>
-                                                                <input type="text" class="form-control" name="problem_description" placeholder="Enter Description" required>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="images" class="form-label">Image <span style="color: red;">*</span> </label>
-                                                                <input type="file" class="form-control" name="images" id="images" onchange="validateSize(this)" required>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <input type="hidden" class="form-control" name="date_of_reg" id="date_of_reg" required>
-                                                            </div>
-                                                        </div>
-                                                        <input type="hidden" name="status" value="2">
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-    <!------------Rejected Reason modal-------------->
-    <div class="modal fade" id="problemrejected" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background: linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color: white;">
-                    <h5 class="modal-title" id="exampleModalLabel">Reason for Rejection</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                            <input type="hidden" name="status" value="2">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <form id="addnewdetails">
-                    <div class="modal-body" style="font-size:larger;">
-                        <textarea type="text" id="pdrej2" value="" style="width:460px;height: 180px; resize: none;" disabled>
-                        </textarea>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-dismiss="modal">Close</button>
-                        </div>
-                </form>
             </div>
         </div>
-    </div>
 
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-    <script src="assets/libs/jquery/dist/jquery.min.js"></script>
-    <script src="assets/libs/popper.js/dist/umd/popper.min.js"></script>
-    <script src="assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
-    <script src="assets/extra-libs/sparkline/sparkline.js"></script>
-    <script src="dist/js/waves.js"></script>
-    <script src="dist/js/sidebarmenu.js"></script>
-    <script src="dist/js/custom.min.js"></script>
-    <script src="assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
-    <script src="assets/extra-libs/multicheck/jquery.multicheck.js"></script>
-    <script src="assets/extra-libs/DataTables/datatables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <!------------Rejected Reason modal-------------->
+        <div class="modal fade" id="problemrejected" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background: linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color: white;">
+                        <h5 class="modal-title" id="exampleModalLabel">Reason for Rejection</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="addnewdetails">
+                        <div class="modal-body" style="font-size:larger;">
+                            <textarea type="text" id="pdrej2" value="" style="width:460px;height: 180px; resize: none;" disabled>
+                        </textarea>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-dismiss="modal">Close</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- All Jquery -->
+        <!-- ============================================================== -->
+        <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+        <script src="assets/libs/popper.js/dist/umd/popper.min.js"></script>
+        <script src="assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+        <script src="assets/extra-libs/sparkline/sparkline.js"></script>
+        <script src="dist/js/waves.js"></script>
+        <script src="dist/js/sidebarmenu.js"></script>
+        <script src="dist/js/custom.min.js"></script>
+        <script src="assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
+        <script src="assets/extra-libs/multicheck/jquery.multicheck.js"></script>
+        <script src="assets/extra-libs/DataTables/datatables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
-    <!-- Set Today date in Raise Complaint-->
-    <script>
-        var today = new Date().toISOString().split('T')[0];
-        var dateInput = document.getElementById('date_of_reg');
-        dateInput.setAttribute('min', today);
-        dateInput.setAttribute('max', today);
-        dateInput.value = today;
-    </script>
+        <!-- Set Today date in Raise Complaint-->
+        <script>
+            var today = new Date().toISOString().split('T')[0];
+            var dateInput = document.getElementById('date_of_reg');
+            dateInput.setAttribute('min', today);
+            dateInput.setAttribute('max', today);
+            dateInput.value = today;
+        </script>
 
-    <!--file size and type -->
-    <script>
-        function validateSize(input) {
-            const filesize = input.files[0].size / 1024; // Size in KB
-            var ext = input.value.split(".");
-            ext = ext[ext.length - 1].toLowerCase();
-            var arrayExtensions = ["jpg", "jpeg", "png"];
-            if (arrayExtensions.lastIndexOf(ext) == -1) {
-                swal("Invalid Image Format, Only .jpeg, .jpg, .png format allowed", "", "error");
-                $(input).val('');
-            } else if (filesize > 2048) {
-                swal("File is too large, Maximum 2 MB is allowed", "", "error");
-                $(input).val('');
-            }
-        }
-
-        //raise complaint others field
-        function checkIfOthers() {
-            const dropdown = document.getElementById('dropdown');
-            const othersInput = document.getElementById('othersInput');
-
-            // Show the input field if "Others" is selected
-            if (dropdown.value === 'Other') {
-                othersInput.style.display = 'block';
-            } else {
-                othersInput.style.display = 'none';
-            }
-        }
-
-        function handleSubmit(event) {
-            event.preventDefault(); // Prevent form submission for demo purposes
-            const dropdown = document.getElementById('dropdown');
-            const selectedValue = dropdown.value;
-            let finalValue;
-
-            // Get the appropriate value based on the dropdown selection
-            if (selectedValue === 'Other') {
-                finalValue = document.getElementById('otherValue').value;
-            } else {
-                finalValue = selectedValue;
+        <!--file size and type -->
+        <script>
+            function validateSize(input) {
+                const filesize = input.files[0].size / 1024; // Size in KB
+                var ext = input.value.split(".");
+                ext = ext[ext.length - 1].toLowerCase();
+                var arrayExtensions = ["jpg", "jpeg", "png"];
+                if (arrayExtensions.lastIndexOf(ext) == -1) {
+                    swal("Invalid Image Format, Only .jpeg, .jpg, .png format allowed", "", "error");
+                    $(input).val('');
+                } else if (filesize > 2048) {
+                    swal("File is too large, Maximum 2 MB is allowed", "", "error");
+                    $(input).val('');
+                }
             }
 
-            console.log("Selected Category:", finalValue);
-            // You can then send this data to the backend or process it further
-            $("#oth").val(finalValue);
-        }
-    </script>
+            //raise complaint others field
+            function checkIfOthers() {
+                const dropdown = document.getElementById('dropdown');
+                const othersInput = document.getElementById('othersInput');
 
-    <script>
-        //Tool Tip
-        $(function() {
-            // Initialize the tooltip
-            $('[data-toggle="tooltip"]').tooltip();
+                // Show the input field if "Others" is selected
+                if (dropdown.value === 'Other') {
+                    othersInput.style.display = 'block';
+                } else {
+                    othersInput.style.display = 'none';
+                }
+            }
 
-            // You can also set options manually if needed
-            $('.btnreject').tooltip({
-                placement: 'top',
-                title: 'Reject'
-            });
-        });
+            function handleSubmit(event) {
+                event.preventDefault(); // Prevent form submission for demo purposes
+                const dropdown = document.getElementById('dropdown');
+                const selectedValue = dropdown.value;
+                let finalValue;
 
-        $(function() {
-            // Initialize the tooltip
-            $('[data-toggle="tooltip"]').tooltip();
+                // Get the appropriate value based on the dropdown selection
+                if (selectedValue === 'Other') {
+                    finalValue = document.getElementById('otherValue').value;
+                } else {
+                    finalValue = selectedValue;
+                }
 
-            // You can also set options manually if needed
-            $('.btnrejfeed').tooltip({
-                placement: 'top',
-                title: 'Rejected Reason'
-            });
-        });
+                console.log("Selected Category:", finalValue);
+                // You can then send this data to the backend or process it further
+                $("#oth").val(finalValue);
+            }
+        </script>
 
-        $(function() {
-            // Initialize the tooltip
-            $('[data-toggle="tooltip"]').tooltip();
+        <script>
+            //Tool Tip
+            $(function() {
+                // Initialize the tooltip
+                $('[data-toggle="tooltip"]').tooltip();
 
-            // You can also set options manually if needed
-            $('.btndesc').tooltip({
-                placement: 'top',
-                title: 'Problem Description'
-            });
-        });
-
-        $(function() {
-            // Initialize the tooltip
-            $('[data-toggle="tooltip"]').tooltip();
-
-            // You can also set options manually if needed
-            $('.viewafterimgcomp').tooltip({
-                placement: 'top',
-                title: 'After Image'
-            });
-        });
-
-        $(function() {
-            // Initialize the tooltip
-            $('[data-toggle="tooltip"]').tooltip();
-
-            // You can also set options manually if needed
-            $('.btnraisecomp').tooltip({
-                placement: 'top',
-                title: 'Raise Complaint'
-            });
-        });
-
-        $(function() {
-            // Initialize the tooltip
-            $('[data-toggle="tooltip"]').tooltip();
-
-            // You can also set options manually if needed
-            $('.btnapprove').tooltip({
-                placement: 'top',
-                title: 'Accept'
-            });
-        });
-
-        $(function() {
-            // Initialize the tooltip
-            $('[data-toggle="tooltip"]').tooltip();
-
-            // You can also set options manually if needed
-            $('.showImage').tooltip({
-                placement: 'top',
-                title: 'Before Image'
-            });
-        });
-
-        alertify.set('notifier', 'position', 'top-right');
-        $(document).ready(function() {
-            $('#myTable1').DataTable();
-            $('#myTable2').DataTable();
-            $('#myTable3').DataTable();
-            $('#myTable4').DataTable();
-        });
-
-        //Reject Button with Feedback
-        $('#rejectdetails').on('submit', function(e) {
-            e.preventDefault();
-
-            if (confirm('Are you sure you want to reject this complaint?')) {
-                var formdata1 = new FormData(this);
-                var reject_id = $('.btnreject').val();
-
-                formdata1.append("reject_id", reject_id);
-                $.ajax({
-                    type: "POST",
-                    url: 'cms_backend.php?action=rejectbtn',
-                    data: formdata1,
-                    processData: false,
-                    contentType: false,
-
-                    success: function(response) {
-                        var res = jQuery.parseJSON(response);
-                        if (res.status == 200) {
-                            $('#rejectmodal').modal('hide');
-                            $('#rejectdetails')[0].reset();
-                            $('#myTable1').load(location.href + " #myTable1");
-                            $('#myTable4').load(location.href + " #myTable4");
-                            $('#myTable1').DataTable().destroy();
-                            $('#myTable4').DataTable().destroy();
-                            $("#myTable1").load(location.href + " #myTable1 > *", function() {
-                                $('#myTable1').DataTable();
-                            });
-                            $("#myTable4").load(location.href + " #myTable4 > *", function() {
-                                $('#myTable4').DataTable();
-                            });
-                            $('#navref1').load(location.href + " #navref1");
-                            $('#navref4').load(location.href + " #navref4");
-
-                        } else if (res.status == 500) {
-                            alertify.error('Complaint Rejected!');
-                            $('#rejectmodal').modal('hide');
-                            $('#rejectdetails')[0].reset();
-                            console.error("Error:", res.message);
-                            alert("Something Went wrong.! try again")
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX error:", error);
-                        alert("An error occurred: " + error);
-                    }
+                // You can also set options manually if needed
+                $('.btnreject').tooltip({
+                    placement: 'top',
+                    title: 'Reject'
                 });
-            }
-        });
+            });
 
-        //approve button
-        $(document).on('click', '.btnapprove', function(e) {
-            e.preventDefault();
+            $(function() {
+                // Initialize the tooltip
+                $('[data-toggle="tooltip"]').tooltip();
 
-            var approveid = $(this).val();
+                // You can also set options manually if needed
+                $('.btnrejfeed').tooltip({
+                    placement: 'top',
+                    title: 'Rejected Reason'
+                });
+            });
 
-            alertify.confirm('Confirmation', 'Are you sure you want to approve this complaint?',
-                function() {
+            $(function() {
+                // Initialize the tooltip
+                $('[data-toggle="tooltip"]').tooltip();
+
+                // You can also set options manually if needed
+                $('.btndesc').tooltip({
+                    placement: 'top',
+                    title: 'Problem Description'
+                });
+            });
+
+            $(function() {
+                // Initialize the tooltip
+                $('[data-toggle="tooltip"]').tooltip();
+
+                // You can also set options manually if needed
+                $('.viewafterimgcomp').tooltip({
+                    placement: 'top',
+                    title: 'After Image'
+                });
+            });
+
+            $(function() {
+                // Initialize the tooltip
+                $('[data-toggle="tooltip"]').tooltip();
+
+                // You can also set options manually if needed
+                $('.btnraisecomp').tooltip({
+                    placement: 'top',
+                    title: 'Raise Complaint'
+                });
+            });
+
+            $(function() {
+                // Initialize the tooltip
+                $('[data-toggle="tooltip"]').tooltip();
+
+                // You can also set options manually if needed
+                $('.btnapprove').tooltip({
+                    placement: 'top',
+                    title: 'Accept'
+                });
+            });
+
+            $(function() {
+                // Initialize the tooltip
+                $('[data-toggle="tooltip"]').tooltip();
+
+                // You can also set options manually if needed
+                $('.showImage').tooltip({
+                    placement: 'top',
+                    title: 'Before Image'
+                });
+            });
+
+            alertify.set('notifier', 'position', 'top-right');
+            $(document).ready(function() {
+                $('#myTable1').DataTable();
+                $('#myTable2').DataTable();
+                $('#myTable3').DataTable();
+                $('#myTable4').DataTable();
+            });
+
+            //Reject Button with Feedback
+            $('#rejectdetails').on('submit', function(e) {
+                e.preventDefault();
+
+                if (confirm('Are you sure you want to reject this complaint?')) {
+                    var formdata1 = new FormData(this);
+                    var reject_id = $('.btnreject').val();
+
+                    formdata1.append("reject_id", reject_id);
                     $.ajax({
                         type: "POST",
-                        url: 'cms_backend.php?action=approvebtn',
-                        data: {
-                            'approve': approveid
-                        },
+                        url: 'cms_backend.php?action=rejectbtn',
+                        data: formdata1,
+                        processData: false,
+                        contentType: false,
+
                         success: function(response) {
                             var res = jQuery.parseJSON(response);
-                            if (res.status == 500) {
-                                alertify.error(res.message);
-                            } else {
-                                alertify.success('Complaint Approved successfully!');
+                            if (res.status == 200) {
+                                $('#rejectmodal').modal('hide');
+                                $('#rejectdetails')[0].reset();
+                                $('#myTable1').load(location.href + " #myTable1");
+                                $('#myTable4').load(location.href + " #myTable4");
                                 $('#myTable1').DataTable().destroy();
-                                $('#myTable2').DataTable().destroy();
-                                $('#myTable3').DataTable().destroy();
+                                $('#myTable4').DataTable().destroy();
                                 $("#myTable1").load(location.href + " #myTable1 > *", function() {
                                     $('#myTable1').DataTable();
                                 });
-                                $("#myTable2").load(location.href + " #myTable2 > *", function() {
-                                    $('#myTable2').DataTable();
-                                });
-                                $("#myTable3").load(location.href + " #myTable3 > *", function() {
-                                    $('#myTable3').DataTable();
+                                $("#myTable4").load(location.href + " #myTable4 > *", function() {
+                                    $('#myTable4').DataTable();
                                 });
                                 $('#navref1').load(location.href + " #navref1");
-                                $('#navref2').load(location.href + " #navref2");
-                                $('#navref3').load(location.href + " #navref3");
                                 $('#navref4').load(location.href + " #navref4");
+
+                            } else if (res.status == 500) {
+                                alertify.error('Complaint Rejected!');
+                                $('#rejectmodal').modal('hide');
+                                $('#rejectdetails')[0].reset();
+                                console.error("Error:", res.message);
+                                alert("Something Went wrong.! try again")
                             }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX error:", error);
+                            alert("An error occurred: " + error);
                         }
                     });
-                },
-                function() {
-                    alertify.error('Approval canceled');
-                });
-        });
+                }
+            });
 
-        // Add Faculty complaints to database
-        $(document).on('submit', '#addnewuser', function(e) {
-            e.preventDefault(); // Prevent form from submitting normally
-            var formData = new FormData(this);
-            formData.append("hod",true);
-            $.ajax({
-                type: "POST",
-                url: 'cms_backend.php?action=addcomplaint',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    var res = typeof response === 'string' ? JSON.parse(response) : response;
-                    if (res.status === 200) {
-                        swal("Complaint Submitted!", "", "success");
-                        $('#raisemodal').modal('hide');
-                        $('#addnewuser')[0].reset(); // Reset the form
-                        $('#navref1').load(location.href + " #navref1");
-                        $('#navref2').load(location.href + " #navref2");
-                        $('#navref3').load(location.href + " #navref3");
-                        $('#dashref').load(location.href + " #dashref");
+            //approve button
+            $(document).on('click', '.btnapprove', function(e) {
+                e.preventDefault();
 
-                        $('#user').DataTable().destroy();
-                        $("#user").load(location.href + " #user > *", function() {
-                            $('#user').DataTable();
+                var approveid = $(this).val();
+
+                alertify.confirm('Confirmation', 'Are you sure you want to approve this complaint?',
+                    function() {
+                        $.ajax({
+                            type: "POST",
+                            url: 'cms_backend.php?action=approvebtn',
+                            data: {
+                                'approve': approveid
+                            },
+                            success: function(response) {
+                                var res = jQuery.parseJSON(response);
+                                if (res.status == 500) {
+                                    alertify.error(res.message);
+                                } else {
+                                    alertify.success('Complaint Approved successfully!');
+                                    $('#myTable1').DataTable().destroy();
+                                    $('#myTable2').DataTable().destroy();
+                                    $('#myTable3').DataTable().destroy();
+                                    $("#myTable1").load(location.href + " #myTable1 > *", function() {
+                                        $('#myTable1').DataTable();
+                                    });
+                                    $("#myTable2").load(location.href + " #myTable2 > *", function() {
+                                        $('#myTable2').DataTable();
+                                    });
+                                    $("#myTable3").load(location.href + " #myTable3 > *", function() {
+                                        $('#myTable3').DataTable();
+                                    });
+                                    $('#navref1').load(location.href + " #navref1");
+                                    $('#navref2').load(location.href + " #navref2");
+                                    $('#navref3').load(location.href + " #navref3");
+                                    $('#navref4').load(location.href + " #navref4");
+                                }
+                            }
                         });
-                    } else {
-                        console.error("Error:", res.message);
-                        alert("Something went wrong! Try again.");
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error("AJAX Error:", textStatus, errorThrown);
-                    alert("Failed to process response. Please try again.");
-                }
+                    },
+                    function() {
+                        alertify.error('Approval canceled');
+                    });
             });
-        });
-        // problem description
-        $(document).on('click', '#seeproblem', function(e) {
-            e.preventDefault();
-            var user_id = $(this).val();
-            console.log(user_id)
-            $.ajax({
-                type: "POST",
-                url: "cms_backend.php?action=seeproblem",
-                data: {
-                    'seedetails': true,
-                    'user_id': user_id
-                },
-                success: function(response) {
-                    var res = jQuery.parseJSON(response);
-                    console.log(res)
-                    if (res.status == 500) {
-                        alert(res.message);
-                    } else {
-                        $("#id").text(res.data.id);
-                        $("#type_of_problem").text(res.data.type_of_problem);
-                        $("#block_venue").text(res.data.block_venue);
-                        $("#venue_name").text(res.data.venue_name);
-                        $('#pd').text(res.data.problem_description);
-                        $('#probdesc').modal('show');
+
+            // Add Faculty complaints to database
+            $(document).on('submit', '#addnewuser', function(e) {
+                e.preventDefault(); // Prevent form from submitting normally
+                var formData = new FormData(this);
+                formData.append("hod", true);
+                $.ajax({
+                    type: "POST",
+                    url: 'cms_backend.php?action=addcomplaint',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        var res = typeof response === 'string' ? JSON.parse(response) : response;
+                        if (res.status === 200) {
+                            swal("Complaint Submitted!", "", "success");
+                            $('#raisemodal').modal('hide');
+                            $('#addnewuser')[0].reset(); // Reset the form
+                            $('#navref1').load(location.href + " #navref1");
+                            $('#navref2').load(location.href + " #navref2");
+                            $('#navref3').load(location.href + " #navref3");
+                            $('#dashref').load(location.href + " #dashref");
+
+                            $('#user').DataTable().destroy();
+                            $("#user").load(location.href + " #user > *", function() {
+                                $('#user').DataTable();
+                            });
+                        } else {
+                            console.error("Error:", res.message);
+                            alert("Something went wrong! Try again.");
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("AJAX Error:", textStatus, errorThrown);
+                        alert("Failed to process response. Please try again.");
                     }
-                }
+                });
             });
-        });
-
-        // faculty info
-        $(document).on('click', '#facultyinfo', function(e) {
-            e.preventDefault();
-            var user_id = $(this).val();
-            var fac_id = $("#facultyinfo").data("value");
-
-            console.log(user_id);
-            console.log(fac_id);
-            $.ajax({
-                type: "POST",
-                url: 'cms_backend.php?action=facinfohod',
-                data: {
-                    'facultydetails': true,
-                    'user_id': user_id,
-                    'fac_id': fac_id
-                },
-                success: function(response) {
-                    var res = jQuery.parseJSON(response);
-                    console.log(res)
-                    if (res.status == 500) {
-                        alert(res.message);
-                    } else {
-                        $("#id").val(res.data.id);
-                        $("#ifaculty_name").text(res.data.faculty_name);
-                        $("#ifaculty_mail").text(res.data.faculty_mail);
-                        $("#ifaculty_contact").text(res.data.faculty_contact);
-                        $('#faculty_name').text(res.data1.name);
-                        $('#faculty_id').text(res.data1.id);
-                        $('#faculty_dept').text(res.data1.dept);
-                        $('#faculty_desg').text(res.data1.design);
-                        $('#facultymodal').modal('show');
+            // problem description
+            $(document).on('click', '#seeproblem', function(e) {
+                e.preventDefault();
+                var user_id = $(this).val();
+                console.log(user_id)
+                $.ajax({
+                    type: "POST",
+                    url: "cms_backend.php?action=seeproblem",
+                    data: {
+                        'seedetails': true,
+                        'user_id': user_id
+                    },
+                    success: function(response) {
+                        var res = jQuery.parseJSON(response);
+                        console.log(res)
+                        if (res.status == 500) {
+                            alert(res.message);
+                        } else {
+                            $("#id").text(res.data.id);
+                            $("#type_of_problem").text(res.data.type_of_problem);
+                            $("#block_venue").text(res.data.block_venue);
+                            $("#venue_name").text(res.data.venue_name);
+                            $('#pd').text(res.data.problem_description);
+                            $('#probdesc').modal('show');
+                        }
                     }
-                }
+                });
             });
-        });
 
-        //Image Modal Ajax
-        $(document).on('click', '.showImage', function() {
-            var task_id = $(this).val();
-            console.log(task_id);
+            // faculty info
+            $(document).on('click', '#facultyinfo', function(e) {
+                e.preventDefault();
+                var user_id = $(this).val();
+                var fac_id = $("#facultyinfo").data("value");
 
-            $.ajax({
-                type: "POST",
-                url: 'cms_backend.php?action=bimgforhod',
-                data: {
-                    'get_image': true,
-                    'task_id': task_id
-                },
-                success: function(response) {
-                    console.log(response);
-                    var res = jQuery.parseJSON(response);
-                    if (res.status == 200) {
-                        $('#bimg').attr('src',"uploads/"+res.data);
-                        $('#bmodalImage').modal('show');
-                    } else {
-                        $('#modalImage').hide();
-                        alert(response.message);
+                console.log(user_id);
+                console.log(fac_id);
+                $.ajax({
+                    type: "POST",
+                    url: 'cms_backend.php?action=facinfohod',
+                    data: {
+                        'facultydetails': true,
+                        'user_id': user_id,
+                        'fac_id': fac_id
+                    },
+                    success: function(response) {
+                        var res = jQuery.parseJSON(response);
+                        console.log(res)
+                        if (res.status == 500) {
+                            alert(res.message);
+                        } else {
+                            $("#id").val(res.data.id);
+                            $("#ifaculty_name").text(res.data.faculty_name);
+                            $("#ifaculty_mail").text(res.data.faculty_mail);
+                            $("#ifaculty_contact").text(res.data.faculty_contact);
+                            $('#faculty_name').text(res.data1.name);
+                            $('#faculty_id').text(res.data1.id);
+                            $('#faculty_dept').text(res.data1.dept);
+                            $('#faculty_desg').text(res.data1.design);
+                            $('#facultymodal').modal('show');
+                        }
                     }
-                },
-                error: function(xhr, status, error) {
-                    alert('An error occurred while retrieving the image.');
-                }
+                });
             });
-        });
 
-        //After Image Modal
-        $(document).on('click', '.viewafterimgcomp', function() {
-            var task_id = $(this).data('imgs-id');
-            $('#task_id').val(task_id);
+            //Image Modal Ajax
+            $(document).on('click', '.showImage', function() {
+                var task_id = $(this).val();
+                console.log(task_id);
 
-            // Fetch the image from the server
-            $.ajax({
-                type: "POST",
-                url: 'cms_backend.php?action=aimgforhod',
-                data: {
-                    'after_image': true,
-                    'task_id': task_id
-                },
-                dataType: "json",
-                success: function(response) {
-                    if (response.status == 200) {
-                        $('#afterimgcomp').attr('src', response.data.after_photo).show();
-                    } else {
-                        $('afterimgcomp').hide();
-                        alert(response.message);
+                $.ajax({
+                    type: "POST",
+                    url: 'cms_backend.php?action=bimgforhod',
+                    data: {
+                        'get_image': true,
+                        'task_id': task_id
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        var res = jQuery.parseJSON(response);
+                        if (res.status == 200) {
+                            $('#bimg').attr('src', "uploads/" + res.data);
+                            $('#bmodalImage').modal('show');
+                        } else {
+                            $('#modalImage').hide();
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('An error occurred while retrieving the image.');
                     }
-                    $('#viewimgaftercomp').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    alert('An error occurred while retrieving the image.');
-                }
+                });
             });
-        });
 
-        function checkIfOthers() {
-            const dropdown = document.getElementById('dropdown');
-            const othersInput = document.getElementById('othersInput');
+            //After Image Modal
+            $(document).on('click', '.viewafterimgcomp', function() {
+                var task_id = $(this).data('imgs-id');
+                $('#task_id').val(task_id);
 
-            // Show the input field if "Others" is selected
-            if (dropdown.value === 'Other') {
-                othersInput.style.display = 'block';
-            } else {
-                othersInput.style.display = 'none';
+                // Fetch the image from the server
+                $.ajax({
+                    type: "POST",
+                    url: 'cms_backend.php?action=aimgforhod',
+                    data: {
+                        'after_image': true,
+                        'task_id': task_id
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status == 200) {
+                            $('#afterimgcomp').attr('src', response.data.after_photo).show();
+                        } else {
+                            $('afterimgcomp').hide();
+                            alert(response.message);
+                        }
+                        $('#viewimgaftercomp').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        alert('An error occurred while retrieving the image.');
+                    }
+                });
+            });
+
+            function checkIfOthers() {
+                const dropdown = document.getElementById('dropdown');
+                const othersInput = document.getElementById('othersInput');
+
+                // Show the input field if "Others" is selected
+                if (dropdown.value === 'Other') {
+                    othersInput.style.display = 'block';
+                } else {
+                    othersInput.style.display = 'none';
+                }
             }
-        }
 
-        function handleSubmit(event) {
-            event.preventDefault(); // Prevent form submission for demo purposes
-            const dropdown = document.getElementById('dropdown');
-            const selectedValue = dropdown.value;
-            let finalValue;
+            function handleSubmit(event) {
+                event.preventDefault(); // Prevent form submission for demo purposes
+                const dropdown = document.getElementById('dropdown');
+                const selectedValue = dropdown.value;
+                let finalValue;
 
-            // Get the appropriate value based on the dropdown selection
-            if (selectedValue === 'Other') {
-                finalValue = document.getElementById('otherValue').value;
-            } else {
-                finalValue = selectedValue;
+                // Get the appropriate value based on the dropdown selection
+                if (selectedValue === 'Other') {
+                    finalValue = document.getElementById('otherValue').value;
+                } else {
+                    finalValue = selectedValue;
+                }
+
+                console.log("Selected Category:", finalValue);
+                // You can then send this data to the backend or process it further
+                $("#oth").val(finalValue);
             }
 
-            console.log("Selected Category:", finalValue);
-            // You can then send this data to the backend or process it further
-            $("#oth").val(finalValue);
-        }
+            //Rejected Tab Feedback
+            $(document).on('click', '#rejectedfeedback', function(e) {
+                e.preventDefault();
+                var user_idrej = $(this).val();
+                console.log(user_idrej)
+                $.ajax({
+                    type: "POST",
+                    url: 'cms_backend.php?action=rejfeedback',
+                    data: {
+                        'seefeedback': true,
+                        'user_idrej': user_idrej
 
-        //Rejected Tab Feedback
-        $(document).on('click', '#rejectedfeedback', function(e) {
-            e.preventDefault();
-            var user_idrej = $(this).val();
-            console.log(user_idrej)
-            $.ajax({
-                type: "POST",
-                url: 'cms_backend.php?action=rejfeedback',
-                data: {
-                    'seefeedback': true,
-                    'user_idrej': user_idrej
-
-                },
-                success: function(response) {
-                    var res = jQuery.parseJSON(response);
-                    console.log(res)
-                    if (res.status == 500) {
-                        alert(res.message);
-                    } else {
-                        $('#pdrej2').val(res.data.feedback);
-                        $('#problemrejected').modal('show');
+                    },
+                    success: function(response) {
+                        var res = jQuery.parseJSON(response);
+                        console.log(res)
+                        if (res.status == 500) {
+                            alert(res.message);
+                        } else {
+                            $('#pdrej2').val(res.data.feedback);
+                            $('#problemrejected').modal('show');
+                        }
                     }
-                }
+                });
             });
-        });
-    </script>
+        </script>
 </body>
 
 </html>
