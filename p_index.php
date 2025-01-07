@@ -215,7 +215,7 @@ include("db.php");
                             style="background-color: #f563fe ;">
                             <i class="fas fa-bell m-b-5 font-20"></i>
                             <h5 class="text-white"><span id="complainCount"></span></h5>
-                            <small class="font-light">Total Companies</small>
+                            <small class="font-light">Total Complaints</small>
                           </div>
                         </div>
                       </div>
@@ -382,7 +382,7 @@ include("db.php");
 
     function fetchComplaintCounts() {
       $.ajax({
-        url: 'diamondbackend.php', // URL to the PHP file
+        url: 'ubackend.php', // URL to the PHP file
         method: 'POST',
         data: {}, // Additional data can be sent if needed
         dataType: 'json',
