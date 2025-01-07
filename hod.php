@@ -288,7 +288,7 @@ $rejected = mysqli_num_rows($result3);
                                                     aria-selected="false"><span class="hidden-sm-up"></span>
                                                     <div id="navref4">
                                                         <span class="hidden-xs-down">
-                                                            <i class="mdi mdi-close-circle"></i><b>&nbsp Rejected (<? echo $rejected;
+                                                            <i class="mdi mdi-close-circle"></i><b>&nbsp Rejected (<?php echo $rejected;
                                                                                                                     ?>)</b>
                                                         </span>
                                                     </div>
@@ -612,19 +612,22 @@ $rejected = mysqli_num_rows($result3);
                                                                                         <center>
                                                                                             <?php
                                                                                             $statusMessages = [
-                                                                                                1 => 'Pending',
-                                                                                                2 => 'Approved by infra',
-                                                                                                3 => 'Rejected by infra',
+                                                                                                2 => 'Forwarded to HOD',
                                                                                                 4 => 'Forwaded to EO',
+                                                                                                5 => 'Rejected By HOD',
                                                                                                 6 => 'Sent to principal for approval',
-                                                                                                7 => 'Assigned to worker',
-                                                                                                10 => 'Work in progress',
-                                                                                                11 => 'Waiting for approval',
+                                                                                                8 => 'Accepted by Principal',
+                                                                                                9 => 'Approved by Manager',
+                                                                                                10 => 'Approved By Worker',
+                                                                                                11 => 'Waiting for Approval',
                                                                                                 13 => 'Sent to infra for completion',
-                                                                                                14 => 'Waiting to be Reassigned',
+                                                                                                14 => 'Feedback by faculty',
                                                                                                 15 => 'Work is Reassigned',
-                                                                                                17 => 'Work in Progress',
-                                                                                                18 => 'Waiting for Approval',
+                                                                                                16 => 'Work is Completed',
+                                                                                                19 => 'Rejected By Principal',
+                                                                                                20 => 'Rejected by Manager',
+                                                                                                22 => 'Accepted by EO',
+                                                                                                23 => 'Rejected By EO',
                                                                                             ];
 
                                                                                             $status = $row['status'];
