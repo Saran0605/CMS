@@ -16,7 +16,7 @@ $faculty_id = $_SESSION['faculty_id']; // Assuming 'faculty_id' is stored in ses
 $query = "SELECT * FROM complaints_detail WHERE faculty_id = '$faculty_id'";
 $result = mysqli_query($conn, $query);
 
-$sql5 = "SELECT * FROM complaints_detail WHERE status IN (1,2,4,6,8,9) AND faculty_id = '$faculty_id'";
+$sql5 = "SELECT * FROM complaints_detail WHERE status IN (1,2,4,6,8,9,22) AND faculty_id = '$faculty_id'";
 $sql1 = "SELECT * FROM complaints_detail WHERE status IN (7,10,11,17,18) AND faculty_id = '$faculty_id'";
 $sql2 = "SELECT * FROM complaints_detail WHERE status = 16 AND faculty_id = '$faculty_id'";
 $sql3 = "SELECT * FROM complaints_detail WHERE status IN (3,5,19,20) AND faculty_id = '$faculty_id'";
@@ -609,7 +609,7 @@ if (isset($_POST['facdet'])) {
                                                                             $statusMessage = 'Pending';
                                                                             break;
                                                                         case 2:
-                                                                            $statusMessage = 'Approved by Infra';
+                                                                            $statusMessage = 'pending';
                                                                             break;
                                                                         case 4:
                                                                             $statusMessage = 'Approved by HOD';
@@ -623,6 +623,9 @@ if (isset($_POST['facdet'])) {
                                                                         case 9:
                                                                             $statusMessage = ' Approved by Manager';
                                                                             break;
+                                                                        case 22:
+                                                                                $statusMessage = ' Approved by EO';
+                                                                                break;
                                                                         default:
                                                                             $statusMessage = 'Unknown Status';
                                                                     }
