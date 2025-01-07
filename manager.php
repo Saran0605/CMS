@@ -678,9 +678,8 @@ $result11 = mysqli_query($conn, $sql11);
                                                                         </center>
 
                                                                     </ul>
-                                                                <?php } ?>
 
-                                                                <button type="button" class="btn btn-danger rejectcomplaint"
+                                                                    <button type="button" class="btn btn-danger rejectcomplaint"
                                                                     id="rejectbutton" value="<?php echo $row['id']; ?>"
                                                                     data-toggle="modal"
                                                                     data-target="#rejectModal"><i class="fas fa-times"></i></button>
@@ -690,6 +689,9 @@ $result11 = mysqli_query($conn, $sql11);
                                                                     data-toggle="modal"
                                                                     data-target="#principalModal"><i class="fas fa-paper-plane"></i>
                                                                 </button>
+                                                                <?php } ?>
+
+                                                               
                                                             </td>
                                                         </tr>
                                                     <?php
