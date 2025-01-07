@@ -295,8 +295,8 @@ $rejected = mysqli_num_rows($result3);
                                                 </a>
                                             </li>
                                         </ul>
-                                        <!-------------------------dashboard------------------------------>
-                                        <div class="tab-content tabcontent-border">
+                                                                                <!-------------------------dashboard------------------------------>
+                                                                                <div class="tab-content tabcontent-border">
                                             <div class="tab-pane p-20 active show" id="dashboard" role="tabpanel">
                                                 <div class="card">
                                                     <div class="card-body">
@@ -313,36 +313,10 @@ $rejected = mysqli_num_rows($result3);
                                                                             <div class="stats-box text-center p-3" style="background-color:orange;">
                                                                                 <i class="fas fa-clock"></i>
                                                                                 <h1 class="font-light text-white">
-                                                                                    <?php $query2 = "SELECT COUNT(*) as pending FROM complaints_detail WHERE  status ='2'";
-                                                                                    $output2 = mysqli_query($conn, $query2);
-                                                                                    $row2 = mysqli_fetch_assoc($output2);
-                                                                                    $pendingCount = $row2['pending'];
-                                                                                    echo $pendingCount;
+                                                                                    <?php echo $pending;
                                                                                     ?>
                                                                                 </h1>
                                                                                 <small class="font-light">Pending</small>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- Faculty infra Pending -->
-                                                            <div class="col-12 col-md-3">
-                                                                <div class="cir">
-                                                                    <div class="bo">
-                                                                        <div class="content1">
-                                                                            <div class="stats-box text-center p-3" style="background-color:red;">
-                                                                                <i class="fas fa-exclamation"></i>
-                                                                                <h1 class="font-light text-white">
-                                                                                    <?php $query2 = "SELECT COUNT(*) as pending FROM complaints_detail WHERE  status ='1'";
-                                                                                    $output2 = mysqli_query($conn, $query2);
-                                                                                    $row2 = mysqli_fetch_assoc($output2);
-                                                                                    $pendingCount = $row2['pending'];
-                                                                                    echo $pendingCount;
-                                                                                    ?>
-                                                                                </h1>
-                                                                                <small class="font-light">Faculty Incharge Pending</small>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -357,11 +331,7 @@ $rejected = mysqli_num_rows($result3);
                                                                             <div class="stats-box text-center p-3" style="background-color:rgb(14, 86, 239);">
                                                                                 <i class="fas fa-check"></i>
                                                                                 <h1 class="font-light text-white">
-                                                                                    <?php $query2 = "SELECT COUNT(*) as approved FROM complaints_detail WHERE (status ='4' or status ='6' or status='7' or status='10' or status='11' or status='13' or status='14' or status='15' or status='17' or status='18')";
-                                                                                    $output2 = mysqli_query($conn, $query2);
-                                                                                    $row2 = mysqli_fetch_assoc($output2);
-                                                                                    $pendingCount = $row2['approved'];
-                                                                                    echo $pendingCount;
+                                                                                <?php echo $approved;
                                                                                     ?>
                                                                                 </h1>
                                                                                 <small class="font-light">Approved</small>
@@ -379,11 +349,7 @@ $rejected = mysqli_num_rows($result3);
                                                                             <div class="stats-box text-center p-3" style="background-color:rgb(70, 160, 70);">
                                                                                 <i class="mdi mdi-check-all"></i>
                                                                                 <h1 class="font-light text-white">
-                                                                                    <?php $query2 = "SELECT COUNT(*) as completed FROM complaints_detail WHERE status ='16'";
-                                                                                    $output2 = mysqli_query($conn, $query2);
-                                                                                    $row2 = mysqli_fetch_assoc($output2);
-                                                                                    $pendingCount = $row2['completed'];
-                                                                                    echo $pendingCount;
+                                                                                <?php echo $completed;
                                                                                     ?>
                                                                                 </h1>
                                                                                 <small class="font-light">Completed</small>
@@ -392,6 +358,26 @@ $rejected = mysqli_num_rows($result3);
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+
+                                                            <!-- Rejected -->
+                                                            <div class="col-12 col-md-3">
+                                                                <div class="cir">
+                                                                    <div class="bo">
+                                                                        <div class="content1">
+                                                                            <div class="stats-box text-center p-3" style="background-color:red;">
+                                                                                <i class="fas fa-exclamation"></i>
+                                                                                <h1 class="font-light text-white">
+                                                                                <?php echo $rejected;
+                                                                                    ?>
+                                                                                </h1>
+                                                                                <small class="font-light">Rejected</small>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
