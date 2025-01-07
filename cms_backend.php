@@ -1213,6 +1213,7 @@ switch ($action) {
     break;
 
     //bacnkend for workers
+    //worker view complaint description
     case 'wviewcomp':
         $task_id = isset($_POST['task_id']) ? intval($_POST['task_id']) : null;
 
@@ -1262,6 +1263,35 @@ switch ($action) {
 
     $stmt->close();
     break;
+
+
+
+    //restart work for not approval
+    case 'wrestart':
+        $id = $_POST['task_id'];
+
+   
+
+    $sql = "UPDATE complaints_detail 
+            SET status = 10 
+            WHERE id = (SELECT problem_id FROM manager WHERE task_id = '$id')";
+
+$query_run = mysqli_query($conn, $sql);
+if($query_run){
+    $res =[
+        "status" => 200,
+        "message" => "Work started successfully"
+    ];
+    echo json_encode($res);
+}
+else{
+    $res =[
+        "status" => 500,
+        "message" => "Work could not be started"
+    ];
+    echo json_encode($res);
+}
+break;
 
 
     //work completion status update

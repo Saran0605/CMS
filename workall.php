@@ -1447,7 +1447,7 @@ $("#statusnotapproved").load(location.href + " #statusnotapproved > *", function
             console.log(worker_dept);
 
             $.ajax({
-                url: 'cms_backend.php?action=wworkerassign',
+                url: 'cms_backend.php?action=wrestart',
                 type: "POST",
                 data: {
                     "worker_dept": worker_dept
@@ -1456,6 +1456,79 @@ $("#statusnotapproved").load(location.href + " #statusnotapproved > *", function
                     // Inject the received HTML options into the <select> element
                     $('#worker').html(response);
                 }
+            });
+        });
+
+
+
+        $(document).ready(function() {
+            $('.start-work-btn').click(function(e) {
+                e.preventDefault();
+                var taskId = $(this).data('task-id');
+                console.log(taskId);
+
+                $.ajax({
+                    url: 'backend.php',
+                    type: 'POST',
+                    data: {
+                        start_work: true,
+                        task_id: taskId
+                    },
+                    success: function(response) {
+                        var res = jQuery.parseJSON(response);
+                        if(res.status == 200) {
+                            $('#addnewtask').DataTable().destroy();
+
+$("#addnewtask").load(location.href + " #addnewtask > *", function() {
+    // Reinitialize the DataTable after the content is loaded
+    $('#addnewtask').DataTable();
+});
+$('#statusinprogress').DataTable().destroy();
+
+$("#statusinprogress").load(location.href + " #statusinprogress > *", function() {
+    // Reinitialize the DataTable after the content is loaded
+    $('#statusinprogress').DataTable();
+});
+
+$('#approval').DataTable().destroy();
+
+$("#approval").load(location.href + " #approval > *", function() {
+    // Reinitialize the DataTable after the content is loaded
+    $('#approval').DataTable();
+});
+
+$('#addnewtaskcompleted').DataTable().destroy();
+
+$("#addnewtaskcompleted").load(location.href + " #addnewtaskcompleted > *", function() {
+    // Reinitialize the DataTable after the content is loaded
+    $('#addnewtaskcompleted').DataTable();
+});
+
+$('#statusnotapproved').DataTable().destroy();
+
+$("#statusnotapproved").load(location.href + " #statusnotapproved > *", function() {
+    // Reinitialize the DataTable after the content is loaded
+    $('#statusnotapproved').DataTable();
+});
+
+$('#ref1').load(location.href + " #ref1");
+                            $('#ref2').load(location.href + " #ref2");
+
+                            $('#ref3').load(location.href + " #ref3");
+
+                            $('#ref4').load(location.href + " #ref4");
+
+                            $('#ref5').load(location.href + " #ref5");
+
+
+
+
+                        }
+                        else{
+                            alert('Something went wrong')
+                        }
+                    }
+                });
             });
         });
 
