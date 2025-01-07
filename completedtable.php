@@ -13,7 +13,7 @@ include('db.php'); // Include the configuration file
 // Fetch complaints only for this faculty (if necessary)
 $faculty_id = $_SESSION['faculty_id']; // Assuming 'faculty_id' is stored in session
 $qrydata = "SELECT * FROM faculty WHERE id='$faculty_id'";
-$run = mysqli_query($conn,$qrydata);
+$run = mysqli_query($conn, $qrydata);
 $runs = mysqli_fetch_array($run);
 $dept = $runs['dept'];
 
@@ -80,19 +80,19 @@ if (isset($_POST['facdet'])) {
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
     <title>MIC-MKCE</title>
     <!-- Custom CSS -->
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" 
-      integrity="sha384-5lfXGnOGtUZmlO5IO2NzvENm9rj7lN9K2KL+f9HlG6To1w9HheVBYvK+2avqD+X8" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-5lfXGnOGtUZmlO5IO2NzvENm9rj7lN9K2KL+f9HlG6To1w9HheVBYvK+2avqD+X8" crossorigin="anonymous">
 
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
-<!-- Matrix Template Custom CSS -->
-<link href="dist/css/style.min.css" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css">
+    <!-- Matrix Template Custom CSS -->
+    <link href="dist/css/style.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
 
-<!-- Favicon -->
-<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
 
 
     <style>
@@ -586,28 +586,38 @@ if (isset($_POST['facdet'])) {
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div>
-                                                        <?php
-                                                        $bid = '5';
-                                                        if($bid == 1){
-
-                                                            ?>
-                                                            <button type="button" disabled class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Compliant</button>
-                                                        <br>
-                                                        <br>
-                                                        <?php 
-                                                    }
-                                                    else{
-                                                        ?>
-                                                        <button type="button" class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Compliant</button>
-                                                        <br>
-                                                        <br>
                                                     <?php
-                                                    }
-                                                     ?>
+$query_count = "SELECT COUNT(DISTINCT complaints_detail.id) AS comp_count
+                FROM complaints_detail
+                INNER JOIN faculty_details ON faculty_details.faculty_id = complaints_detail.faculty_id
+                WHERE faculty_details.department = 'IT'
+                AND complaints_detail.status NOT IN (16, 5, 19, 23, 20);";
 
-                                                        
-                                                        
-                                                        
+$query_runcount = mysqli_query($conn, $query_count);
+
+if ($query_runcount) {
+    $row = mysqli_fetch_assoc($query_runcount); // Fetch the result row as an associative array
+    $count_val = $row['comp_count']; // Access the 'comp_count' value
+
+    // Check if the count exceeds the limit
+    if ($count_val > 5) {
+        ?>
+        <button type="button" disabled class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Complaint</button>
+        <br><br>
+        <?php
+    } else {
+        ?>
+        <button type="button" class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Complaint</button>
+        <br><br>
+        <?php
+    }
+} 
+?>
+
+
+
+
+
                                                     </div>
                                                     <div class="table-responsive">
                                                         <table id="user" class="table table-bordered table-striped">
@@ -648,8 +658,8 @@ if (isset($_POST['facdet'])) {
                                                                             $statusMessage = ' Approved by Manager';
                                                                             break;
                                                                         case 22:
-                                                                                $statusMessage = ' Approved by EO';
-                                                                                break;
+                                                                            $statusMessage = ' Approved by EO';
+                                                                            break;
                                                                         default:
                                                                             $statusMessage = 'Unknown Status';
                                                                     }
@@ -1007,8 +1017,8 @@ if (isset($_POST['facdet'])) {
                                                             $statusMessage = 'Rejected by HOD';
                                                             break;
                                                         case 23:
-                                                                $statusMessage = 'Rejected by EO';
-                                                                break;
+                                                            $statusMessage = 'Rejected by EO';
+                                                            break;
                                                         case 19:
                                                             $statusMessage = 'Rejected by Principal';
                                                             break;
@@ -1109,35 +1119,35 @@ if (isset($_POST['facdet'])) {
 
 
     <script src="assets/libs/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap 4 Tether Core JavaScript -->
-<script src="assets/libs/popper.js/dist/umd/popper.min.js"></script>
-<script src="assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- Perfect Scrollbar -->
-<script src="assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
-<!-- Sparkline -->
-<script src="assets/extra-libs/sparkline/sparkline.js"></script>
-<!-- Wave Effects -->
-<script src="dist/js/waves.js"></script>
-<!-- Sidebar Menu -->
-<script src="dist/js/sidebarmenu.js"></script>
-<!-- Custom JavaScript -->
-<script src="dist/js/custom.min.js"></script>
+    <!-- Bootstrap 4 Tether Core JavaScript -->
+    <script src="assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Perfect Scrollbar -->
+    <script src="assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <!-- Sparkline -->
+    <script src="assets/extra-libs/sparkline/sparkline.js"></script>
+    <!-- Wave Effects -->
+    <script src="dist/js/waves.js"></script>
+    <!-- Sidebar Menu -->
+    <script src="dist/js/sidebarmenu.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="dist/js/custom.min.js"></script>
 
-<!-- Charts and Analytics -->
-<script src="assets/libs/flot/excanvas.js"></script>
-<script src="assets/libs/flot/jquery.flot.js"></script>
-<script src="assets/libs/flot/jquery.flot.pie.js"></script>
-<script src="assets/libs/flot/jquery.flot.time.js"></script>
-<script src="assets/libs/flot/jquery.flot.stack.js"></script>
-<script src="assets/libs/flot/jquery.flot.crosshair.js"></script>
-<script src="assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
-<script src="dist/js/pages/chart/chart-page-init.js"></script>
+    <!-- Charts and Analytics -->
+    <script src="assets/libs/flot/excanvas.js"></script>
+    <script src="assets/libs/flot/jquery.flot.js"></script>
+    <script src="assets/libs/flot/jquery.flot.pie.js"></script>
+    <script src="assets/libs/flot/jquery.flot.time.js"></script>
+    <script src="assets/libs/flot/jquery.flot.stack.js"></script>
+    <script src="assets/libs/flot/jquery.flot.crosshair.js"></script>
+    <script src="assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+    <script src="dist/js/pages/chart/chart-page-init.js"></script>
 
-<!-- SweetAlert -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- SweetAlert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<!-- DataTables -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
 
     <!-- Set Today date in Raise Complaint-->

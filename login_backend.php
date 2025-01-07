@@ -45,18 +45,7 @@ elseif($user['role']=='infra'){
         echo "<script>alert('Invalid Faculty ID or Password. Please try again.'); window.location.href='flogin.php';</script>";
     }
 }
-elseif($user['role']=='student'){
-    // If user exists
-    if (mysqli_num_rows($result) == 1) {
-        $_SESSION['faculty_id'] = $faculty_id; // Store faculty ID in session
-        
-        header("Location: completedtable.php"); // Redirect to the completedtable page
-        exit();
-    } else {
-        // Invalid credentials
-        echo "<script>alert('Invalid Faculty ID or Password. Please try again.'); window.location.href='flogin.php';</script>";
-    }
-}
+
 } else {
     header("Location: flogin.php"); // Redirect back to login page if accessed without form submission
     exit();
