@@ -1043,9 +1043,8 @@ $result11 = mysqli_query($conn, $sql11);
             console.log(user_id)
             $.ajax({
                 type: "POST",
-                url: "backend1.php",
+                url: 'cms_backend.php?action=manager_response',
                 data: {
-                    'edit_user': true,
                     'user_id': user_id
                 },
                 success: function(response) {
@@ -1107,10 +1106,9 @@ $result11 = mysqli_query($conn, $sql11);
             } else {
                 var formData = new FormData(this);
                 console.log(formData)
-                formData.append("save_edituser", true);
                 $.ajax({
                     type: "POST",
-                    url: "backend1.php",
+                    url: 'cms_backend.php?action=principal_query',
                     data: formData,
                     processData: false,
                     contentType: false,

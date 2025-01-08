@@ -585,38 +585,34 @@ if (isset($_POST['facdet'])) {
                                         <div class="col-md-12">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <div>
-                                                    <?php
-$query_count = "SELECT COUNT(DISTINCT complaints_detail.id) AS comp_count
-                FROM complaints_detail
-                INNER JOIN faculty_details ON faculty_details.faculty_id = complaints_detail.faculty_id
-                WHERE faculty_details.department = 'IT'
-                AND complaints_detail.status NOT IN (16, 5, 19, 23, 20);";
+                                                    <div id="raise_complaint">
+                                                        <?php
+                                                        $query_count = "SELECT COUNT(DISTINCT complaints_detail.id) AS comp_count
+                                                            FROM complaints_detail
+                                                            INNER JOIN faculty_details ON faculty_details.faculty_id = complaints_detail.faculty_id
+                                                            WHERE faculty_details.department = 'IT'
+                                                            AND complaints_detail.status NOT IN (16, 5, 19, 23, 20);";
 
-$query_runcount = mysqli_query($conn, $query_count);
+                                                        $query_runcount = mysqli_query($conn, $query_count);
 
-if ($query_runcount) {
-    $row = mysqli_fetch_assoc($query_runcount); // Fetch the result row as an associative array
-    $count_val = $row['comp_count']; // Access the 'comp_count' value
+                                                        if ($query_runcount) {
+                                                            $row = mysqli_fetch_assoc($query_runcount); // Fetch the result row as an associative array
+                                                            $count_val = $row['comp_count']; // Access the 'comp_count' value
 
-    // Check if the count exceeds the limit
-    if ($count_val > 5) {
-        ?>
-        <button type="button" disabled class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Complaint</button>
-        <br><br>
-        <?php
-    } else {
-        ?>
-        <button type="button" class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Complaint</button>
-        <br><br>
-        <?php
-    }
-} 
-?>
-
-
-
-
+                                                            // Check if the count exceeds the limit
+                                                            if ($count_val >= 5) {
+                                                        ?>
+                                                                <button type="button" disabled class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Complaint</button>
+                                                                <br><br>
+                                                            <?php
+                                                            } else {
+                                                            ?>
+                                                                <button type="button" class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Complaint</button>
+                                                                <br><br>
+                                                        <?php
+                                                            }
+                                                        }
+                                                        ?>
 
                                                     </div>
                                                     <div class="table-responsive">
@@ -1211,7 +1207,8 @@ if ($query_runcount) {
                         $('#navref2').load(location.href + " #navref2");
                         $('#navref3').load(location.href + " #navref3");
                         $('#dashref').load(location.href + " #dashref");
-
+                        $('#raise_complaint').load(location.href + " #raise_complaint");
+                        
                         $('#user').DataTable().destroy();
                         $("#user").load(location.href + " #user > *", function() {
                             $('#user').DataTable();
@@ -1251,6 +1248,7 @@ if ($query_runcount) {
                             $('#navref2').load(location.href + " #navref2");
                             $('#navref3').load(location.href + " #navref3");
                             $('#dashref').load(location.href + " #dashref");
+                            $('#raise_complaint').load(location.href + " #raise_complaint");
 
                             $('#user').DataTable().destroy();
                             $("#user").load(location.href + " #user > *", function() {
