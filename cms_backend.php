@@ -459,6 +459,32 @@ switch ($action) {
         }
         break;
 
+    //partially completed
+    case 'partially_reason':
+        $id = $_POST['id'];
+        // First query
+        $query = "SELECT * FROM complaints_detail WHERE id = ? ";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, "s", $id);
+        mysqli_stmt_execute($stmt);
+        $User_data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+        mysqli_stmt_close($stmt);
+
+        // Response
+        if ($User_data) {
+            echo json_encode([
+                'status' => 200,
+                'message' => 'Details fetched successfully by ID',
+                'data' => $User_data,
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 404,
+                'message' => 'Details not found'
+            ]);
+        }
+        break;
+
 
         //Reassign Work after faculty feedback
     case 'reassign_work':

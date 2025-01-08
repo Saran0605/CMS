@@ -1046,8 +1046,23 @@ $result11 = mysqli_query($conn, $sql11);
                                                                 </button>
                                                             </td>
                                                             <td class="text-center">
+                                                                <?php 
+                                                                if($row5['task_completion'] == 'Fully Completed'){
+                                                                ?>
                                                                 <span
                                                                     class="btn btn-success"><?php echo $row5['task_completion'] ?></span>
+                                                                    <?php
+                                                                    }
+                                                                    else{
+                                                                    ?>
+                                                                    <button
+                                                                    class="btn btn-warning partially" data-toggle="modal"
+                                                                    data-target="#partially_reason" value="<?php echo $row5['id'] ?>" ><?php echo $row5['task_completion'] ?></button>
+
+                                                                    <?php
+                                                                    }
+                                                                    ?>
+
                                                             </td>
                                                         </tr>
                                                     <?php
@@ -1819,6 +1834,39 @@ $result11 = mysqli_query($conn, $sql11);
                                     </div>
                                 </div>
                             </div>
+
+                             <!--Partially completed reason Modal -->
+                             <div class="modal fade" id="partially_reason" tabindex="-1" role="dialog"
+                                aria-labelledby="partially_reasonLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="partially_reasonLabel">Partially Completed Reason</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="principal_Form">
+                                                <input type="hidden" name="id" id="complaint_id89">
+                                                <div class="form-group">
+                                                    <label for="partiallyReason" class="form-label">Reason</label>
+                                                    <textarea readonly class="form-control" name="reason"
+                                                        id="partiallyReason" rows="3"
+                                                        placeholder="Type the reason here..."></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-danger">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
 
                             <!--Principal Approve Modal -->
@@ -3462,6 +3510,31 @@ $result11 = mysqli_query($conn, $sql11);
 
                      })
                  }) */
+
+                 $(document).on("click",".partially",function(e){
+                    e.preventDefault();
+                    var id = $(this).val();
+                    console.log(id);
+
+                    $.ajax({
+                        type:"POST",
+                        url:"cms_backend.php?action=partially_reason",
+                        data:{
+                            id:id,
+                        },
+                        success:function(response){
+                            var res = jQuery.parseJSON(response);
+                            console.log(response);
+                            if(res.status == 404){
+                                alert("something went wrong!!");
+                            }
+                            else{
+                                $("#partiallyReason").text(res.data.reason);
+                                $("#partially_reason").modal("show");
+                            }
+                        }
+                    })
+                 })
             </script>
 
 
