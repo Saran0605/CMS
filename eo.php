@@ -25,7 +25,7 @@ $sql3 = "
 SELECT cd.*, faculty_details.faculty_name, faculty_details.department, faculty_details.faculty_contact, faculty_details.faculty_mail
 FROM complaints_detail cd
 JOIN faculty_details ON cd.faculty_id = faculty_details.faculty_id
-WHERE cd.status IN (19, 20, 23)
+WHERE cd.status IN (19, 20)
 ";
 $result = mysqli_query($conn, $sql);
 $pending = mysqli_num_rows($result);
@@ -780,7 +780,7 @@ $rejected = mysqli_num_rows($result3);
 
                                                                                 <th class="text-center"
                                                                                     style="background-color: #7460ee; background: linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color: white;">
-                                                                                    <b>Status</b>
+                                                                                    <b>Reason</b>
                                                                                 </th>
                                                                             </tr>
                                                                         </thead>
@@ -1137,8 +1137,8 @@ $rejected = mysqli_num_rows($result3);
             </div>
         </div>
 
-        <!------------Rejected Reason modal-------------->
-        <div class="modal fade" id="problemrejected" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!------------Rejected Reason modal-------------->
+<div class="modal fade" id="problemrejected" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header" style="background: linear-gradient(to bottom right, #cc66ff 1%, #0033cc 100%); color: white;">
@@ -1148,9 +1148,21 @@ $rejected = mysqli_num_rows($result3);
                         </button>
                     </div>
                     <form id="addnewdetails">
-                        <div class="modal-body" style="font-size:larger;">
-                            <textarea type="text" id="pdrej2" value="" style="width:460px;height: 180px; resize: none;" disabled>
-                        </textarea>
+                    <div class="modal-body" style="padding: 15px; font-size: 1.1em; color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                        <ol class="list-group list-group-numbered" style="margin-bottom: 0;">
+                            <li class="list-group-item d-flex justify-content-between align-items-start" style="padding: 10px; background-color: #fff;">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold" style="font-size: 1.2em; font-weight: 600; color: #007bff;">Rejected By</div>
+                                    <b><span id="pdrej2" style="color: #555;"></span></b>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start" style="padding: 10px; background-color: #fff;">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold" style="font-size: 1.2em; font-weight: 600; color: #007bff;">Reason</div>
+                                    <b><span id="rejby" style="color: #555;"></span></b>
+                                </div>
+                            </li>
+                        </ol>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary"
                                     data-dismiss="modal">Close</button>
@@ -1626,15 +1638,27 @@ $rejected = mysqli_num_rows($result3);
 
                     },
                     success: function(response) {
-                        var res = jQuery.parseJSON(response);
-                        console.log(res)
-                        if (res.status == 500) {
-                            alert(res.message);
-                        } else {
-                            $('#pdrej2').val(res.data.feedback);
-                            $('#problemrejected').modal('show');
-                        }
-                    }
+    var res = jQuery.parseJSON(response);
+    console.log(res);
+    if (res.status == 500) {
+        alert(res.message);
+    } else {
+        let rejectionReason = "";
+        switch (res.data2.status) {
+            case '19':
+                rejectionReason = "Rejected by Manager";
+                break;
+            case '20':
+                rejectionReason = "Rejected by Principal";
+                break;
+            default:
+                rejectionReason = "Unknown rejection reason";
+        }
+        $('#pdrej2').text(rejectionReason);
+        $('#rejby').text(res.data2.feedback);
+        $('#problemrejected').modal('show');
+    }
+}
                 });
             });
         </script>
