@@ -6,6 +6,7 @@ if (isset($_POST['faculty_id'])) {
 }
 
 
+
 // Define the counter file path
 $counterFilePath = './uploads/counter.txt';
 
@@ -1779,6 +1780,21 @@ switch ($action) {
     case 'facchangepass':
         $newp = $_POST['pass'];
         $sql = "UPDATE faculty_details SET password = '$newp' WHERE faculty_id ='$fac_id'";
+        if (mysqli_query($conn, $sql)) {
+            $res = [
+                "status" => 200,
+                "message" => "password changed",
+            ];
+            echo json_encode($res);
+            break;
+        }
+
+
+
+    case 'workchangepass':
+        $newp = $_POST['pass'];
+        $worker_id = $_SESSION['worker_id'];
+        $sql = "UPDATE worker_details SET password = '$newp' WHERE worker_id ='$worker_id'";
         if (mysqli_query($conn, $sql)) {
             $res = [
                 "status" => 200,

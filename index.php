@@ -285,6 +285,8 @@ $notcount = mysqli_num_rows($result4);
                             <div class="dropdown-menu dropdown-menu-right user-dd animated">
                                 <a class="dropdown-item" href="manager.html"><i class="ti-user m-r-5 m-l-5"></i>My
                                     Profile</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#passmodal"><i class="ti-user m-r-5 m-l-5"></i>
+                                    Change Password</a>
 
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="login.php"><i class="fa fa-power-off m-r-5 m-l-5"></i>
@@ -297,6 +299,28 @@ $notcount = mysqli_num_rows($result4);
                 </div>
             </nav>
         </header>
+        <div class="modal fade" id="passmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="border-radius: 8px; border: 1px solid #ccc;">
+                    <div class="modal-header" style="background-color:rgb(5, 5, 5); border-bottom: 2px solid #e9ecef;">
+                        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="passwordform">
+                        <div class="modal-body" style="padding: 20px; background-color: #f5f5f5;">
+
+                            <input type="text" name="pass" placeholder="Enter new Password" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px;">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" style="background-color: #6c757d; border: none; padding: 10px 20px;">Close</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; padding: 10px 20px;">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <aside class="left-sidebar" data-sidebarbg="skin5">
             <div class="scroll-sidebar"><br>
                 <nav class="sidebar-nav">
@@ -450,6 +474,33 @@ $notcount = mysqli_num_rows($result4);
     <script src="assets/libs/flot/jquery.flot.crosshair.js"></script>
     <script src="assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
     <script src="dist/js/pages/chart/chart-page-init.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        $(document).on("submit", "#passwordform", function(e) {
+            e.preventDefault();
+            var formdata = new FormData(this);
+            console.log(formdata);
+            console.log("hii");
+            $.ajax({
+                type: "POST",
+                url: 'cms_backend.php?action=workchangepass',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+                    var res = jQuery.parseJSON(response);
+                    if (res.status == 200) {
+                        $('#passmodal').modal('hide');
+                        swal("Done!", "Password Changed!", "success");
+                    } else {
+                        alert('error');
+                    }
+                }
+            })
+        })
+    </script>
 
 
 
