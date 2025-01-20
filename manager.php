@@ -45,6 +45,22 @@ $result10 = mysqli_query($conn, $sql10);
 //display all workers
 $sql11 = "SELECT * FROM worker_details";
 $result11 = mysqli_query($conn, $sql11);
+
+
+if(isset($_POST['fdept'])){
+$fdept = "SELECT * FROM departments";
+$fdept_run = mysqli_query($conn,$fdept);
+$options = '';
+
+
+        while ($row = mysqli_fetch_assoc($fdept_run)) {
+            $options .= '<option value="' . $row['dname'] . '">' . $row['dname'] . '</option>';
+        }
+        echo $options;
+        exit;
+
+}
+
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -458,7 +474,7 @@ $result11 = mysqli_query($conn, $sql11);
                                     My Profile</a>
                                 <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#manageworkermodal"><i class="ti-user m-r-5 m-l-5"></i>
                                     Manager Worker</a>
-                                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#manageusermodal"><i class="ti-user m-r-5 m-l-5"></i>
+                                <a class="dropdown-item fetchdept" href="javascript:void(0)" data-toggle="modal" data-target="#manageusermodal"><i class="ti-user m-r-5 m-l-5"></i>
                                     Manager User</a>
                                 <a class="dropdown-item" href="javascript:void(0)"><i
                                         class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
@@ -1670,19 +1686,7 @@ $result11 = mysqli_query($conn, $sql11);
                                                 <input type="tel" name="phone" placeholder="Enter Phone number" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px;">
                                                 <input type="email" name="email" placeholder="Enter Mail Id" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px;">
                                                 <select id="department" name="u_dept" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px;">
-                                                    <option value="all">Select department</option>
-                                                    <option value="Freshman Engineering">Freshman Engineering</option>
-                                                    <option value="Artificial Intelligence and Data Science">Artificial Intelligence and Data Science</option>
-                                                    <option value="Artificial Intelligence and Machine Learning">Artificial Intelligence and Machine Learning</option>
-                                                    <option value="Civil Engineering">Civil Engineering</option>
-                                                    <option value="Computer Science and Business Systems">Computer Science and Business Systems</option>
-                                                    <option value="Computer Science and Engineering">Computer Science and Engineering</option>
-                                                    <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
-                                                    <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
-                                                    <option value="Information Technology">Information Technology</option>
-                                                    <option value="Master of Business Administration">Master of Business Administration</option>
-                                                    <option value="Master of Computer Applications">Master of Computer Applications </option>
-                                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                                    
                                                 </select>
                                                 <select id="role" name="u_role" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; margin-bottom: 15px;">
                                                     <option value="all">Select Role</option>
@@ -3532,6 +3536,22 @@ $result11 = mysqli_query($conn, $sql11);
                                 $("#partiallyReason").text(res.data.reason);
                                 $("#partially_reason").modal("show");
                             }
+                        }
+                    })
+                 });
+
+                 $(document).on("click",".fetchdept",function(e){
+                    e.preventDefault();
+                    $.ajax({
+                        type:"POST",
+                        url:"manager.php",
+                        data:{
+                            "fdept":true,
+
+                        },
+                        success:function(response){
+                            $('#department').html(response);
+
                         }
                     })
                  })
