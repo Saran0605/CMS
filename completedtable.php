@@ -587,6 +587,12 @@ if (isset($_POST['facdet'])) {
                                                 <div class="card-body">
                                                     <div id="raise_complaint">
                                                         <?php
+                                                        
+                                                        $login_query = "SELECT * FROM faculty_details WHERE faculty_id = '$faculty_id'";
+                                                        $login_obj = mysqli_query($conn,$login_query);
+                                                        $login_res = mysqli_fetch_array($login_obj);
+                                                        
+
                                                         $query_count = "SELECT COUNT(DISTINCT complaints_detail.id) AS comp_count
                                                             FROM complaints_detail
                                                             INNER JOIN faculty_details ON faculty_details.faculty_id = complaints_detail.faculty_id
@@ -600,12 +606,13 @@ if (isset($_POST['facdet'])) {
                                                             $count_val = $row['comp_count']; // Access the 'comp_count' value
 
                                                             // Check if the count exceeds the limit
+                                                           
                                                             if ($count_val >= 5) {
                                                         ?>
-                                                                <button type="button" disabled class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Complaint</button>
+                                                                <button type="button"  class="btn btn-danger float-right limitcr">Raise Complaint</button>
                                                                 <br><br>
                                                             <?php
-                                                            } else {
+                                                            } else if($login_res) {
                                                             ?>
                                                                 <button type="button" class="btn btn-info float-right fac" data-toggle="modal" data-target="#cmodal">Raise Complaint</button>
                                                                 <br><br>
@@ -1519,6 +1526,11 @@ if (isset($_POST['facdet'])) {
                     }
                 }
             })
+        })
+        $(document).on('click',".limitcr",function(e){
+            e.preventDefault();
+            swal("Failed", "Limits Crossed,Unable to Raise!", "warning");
+
         })
     </script>
 </body>
