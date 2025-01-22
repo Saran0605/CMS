@@ -1563,21 +1563,21 @@ $rejected = mysqli_num_rows($result3);
 
             //After Image Modal
             $(document).on('click', '.viewafterimgcomp', function() {
-                var task_id = $(this).data('imgs-id');
-                $('#task_id').val(task_id);
+                var task_id = $(this).val();
 
                 // Fetch the image from the server
                 $.ajax({
                     type: "POST",
-                    url: 'cms_backend.php?action=aimgforhod',
+                    url: 'cms_backend.php?action=get_aimage',
                     data: {
                         'after_image': true,
-                        'task_id': task_id
+                        'problem2_id': task_id,
                     },
                     dataType: "json",
                     success: function(response) {
                         if (response.status == 200) {
-                            $('#afterimgcomp').attr('src', response.data.after_photo).show();
+                            $('#afterimgcomp').attr('src', response.data.after_photo);
+                            $('#cmodal').modal('hide');
                         } else {
                             $('afterimgcomp').hide();
                             alert(response.message);

@@ -1567,8 +1567,7 @@ $rejected = mysqli_num_rows($result3);
 
             //After Image Modal
             $(document).on('click', '.viewafterimgcomp', function() {
-                var task_id = $(this).data('imgs-id');
-                $('#task_id').val(task_id);
+                var task_id = $(this).val();
 
                 // Fetch the image from the server
                 $.ajax({
