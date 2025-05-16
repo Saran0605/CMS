@@ -7,9 +7,10 @@ The system is currently **live and operational** in our institution.
 ---
 
 ## 🚀 Live Project
+**🔗 Visit Live Site**- https://mic.mkce.ac.in/
 
-🔗 [Visit Live Site](https://your-live-url.com) *(update this with actual link)*  
-🎓 Deployed for: [Your College Name] – MIC Cell
+---
+## 🎓 Deployed for: M Kumarasamy College of Engineering 
 
 ---
 
@@ -53,18 +54,6 @@ The system is currently **live and operational** in our institution.
 
 ---
 
-## 🖼️ Screenshots (Optional)
-
-> *(Insert a few key UI screenshots here if available)*
-
----
-
-## 📫 Contact
-
-Want to know more about this system or deploy it in your institution?  
-Connect with me on [LinkedIn](https://linkedin.com/in/yourname) or email me at [your.email@example.com].
-
----
 
 ## 💡 Future Enhancements
 
